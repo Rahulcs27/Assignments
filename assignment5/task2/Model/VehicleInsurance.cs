@@ -20,7 +20,7 @@ namespace task2.Model
             VehicleValue = vehicleValue;
         }
 
-        // Abstract method for premium calculation (must be implemented by derived classes)
+        // Abstract method for premium calculation
         public abstract double CalculatePremium();
 
         // Display details
