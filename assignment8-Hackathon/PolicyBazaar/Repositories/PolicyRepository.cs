@@ -12,7 +12,7 @@ namespace PolicyBazaar.Repositories
     internal class PolicyRepository : IPolicyRepository
     {
         private List<Policy> policies = new List<Policy>();
-        private int nextPolicyId = 1; 
+        private int nextPolicyId = 1;
 
         public void AddPolicy()
         {
@@ -26,25 +26,22 @@ namespace PolicyBazaar.Repositories
                 return;
             }
 
-            Console.Write("Enter Start Date (yyyy-MM-dd): ");
-            if (!DateTime.TryParse(Console.ReadLine(), out DateTime startDate))
-            {
-                Console.WriteLine("❌ Invalid date format! Please enter in yyyy-MM-dd.");
-                return;
-            }
+            DateTime startDate = DateTime.Now;
+            Console.WriteLine($" Start Date: {startDate:yyyy-MM-dd} (Auto-assigned)");
 
             Console.Write("Enter End Date (yyyy-MM-dd): ");
             if (!DateTime.TryParse(Console.ReadLine(), out DateTime endDate) || endDate <= startDate)
             {
-                Console.WriteLine(" End Date must be after Start Date!");
+                Console.WriteLine("❌ End Date must be after Start Date!");
                 return;
             }
 
-            Policy newPolicy = new Policy(nextPolicyId++, name, type, startDate, endDate); // Auto-increment ID
+            Policy newPolicy = new Policy(nextPolicyId++, name, type, endDate);
             policies.Add(newPolicy);
 
             Console.WriteLine($" Policy added successfully! Policy ID: {newPolicy.PolicyId}");
         }
+
         public void ViewPolicy()
         {
             if (policies.Count == 0)
@@ -56,7 +53,7 @@ namespace PolicyBazaar.Repositories
             Console.WriteLine("\n List of Policies:");
             foreach (var policy in policies)
             {
-                Console.WriteLine($" ID: {policy.PolicyId} | Name: {policy.PolicyHolderName} | Type: {policy.Type} | Ends: {policy.EndDate:yyyy-MM-dd}");
+                Console.WriteLine(policy);
             }
         }
 

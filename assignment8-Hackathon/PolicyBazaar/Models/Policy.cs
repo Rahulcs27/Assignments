@@ -21,12 +21,12 @@ namespace PolicyBazaar.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public Policy(int policyId, string policyHolderName, PolicyType type, DateTime startDate, DateTime endDate)
+        public Policy(int policyId, string policyHolderName, PolicyType type, DateTime endDate)
         {
             PolicyId = policyId;
             PolicyHolderName = policyHolderName;
             Type = type;
-            StartDate = startDate;
+            StartDate = DateTime.Now;
             EndDate = endDate;
         }
 
