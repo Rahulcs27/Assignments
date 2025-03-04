@@ -45,7 +45,7 @@ namespace PolicyBazaar.Repositories
 
             Console.WriteLine($" Policy added successfully! Policy ID: {newPolicy.PolicyId}");
         }
-        public void ViewAllPolicy()
+        public void ViewPolicy()
         {
             if (policies.Count == 0)
             {
@@ -56,7 +56,7 @@ namespace PolicyBazaar.Repositories
             Console.WriteLine("\n List of Policies:");
             foreach (var policy in policies)
             {
-                Console.WriteLine($" ID: {policy.PolicyId} | Name: {policy.PolicyHolderName} | Type: {policy.PolicyType} | Ends: {policy.EndDate:yyyy-MM-dd}");
+                Console.WriteLine($" ID: {policy.PolicyId} | Name: {policy.PolicyHolderName} | Type: {policy.Type} | Ends: {policy.EndDate:yyyy-MM-dd}");
             }
         }
 
