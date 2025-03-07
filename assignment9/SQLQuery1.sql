@@ -135,4 +135,23 @@ from OrderItems
 Join Books
 on Books.BookID = OrderItems.BookID
 
---6. Display all customers, even those who haven’t placed any orders. Select Customers.Name , Orders.OrderID , Orders.TotalAmountfrom CustomersLeft join Orderson Customers.CustomerID = Orders.CustomerID--7. Find authors who have not written any books select Authors.Namefrom Authorsleft join Bookson Books.AuthorID = Authors.AuthorIDwhere Books.BookID is Null
+--6. Display all customers, even those who haven’t placed any orders. Select Customers.Name , Orders.OrderID , Orders.TotalAmountfrom CustomersLeft join Orderson Customers.CustomerID = Orders.CustomerID--7. Find authors who have not written any books select Authors.Namefrom Authorsleft join Bookson Books.AuthorID = Authors.AuthorIDwhere Books.BookID is Null--Assignment Day10--1. Find the customer(s) who placed the first order (earliest OrderDate). SELECT Name as customername ,(SELECT MIN(OrderDate) FROM Orders)as OrderDate
+FROM Customers 
+WHERE CustomerID = (
+    SELECT CustomerID 
+    FROM Orders 
+    WHERE OrderDate = (SELECT MIN(OrderDate) FROM Orders)
+);
+  SELECT c.Name AS CustomerName, o.OrderDate
+FROM Customers c, Orders o
+WHERE c.CustomerID = o.CustomerID
+AND o.OrderDate = (SELECT MIN(OrderDate) FROM Orders);
+
+
+
+--3. Find customers who have not placed any orders.
+SELECT * 
+FROM Customers 
+WHERE CustomerID NOT IN (SELECT DISTINCT CustomerID FROM Orders);
+
+--4. Retrieve all books cheaper than the most expensive book written byselect 
