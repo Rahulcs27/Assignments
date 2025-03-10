@@ -135,23 +135,62 @@ from OrderItems
 Join Books
 on Books.BookID = OrderItems.BookID
 
---6. Display all customers, even those who haven’t placed any orders. Select Customers.Name , Orders.OrderID , Orders.TotalAmountfrom CustomersLeft join Orderson Customers.CustomerID = Orders.CustomerID--7. Find authors who have not written any books select Authors.Namefrom Authorsleft join Bookson Books.AuthorID = Authors.AuthorIDwhere Books.BookID is Null--Assignment Day10--1. Find the customer(s) who placed the first order (earliest OrderDate). SELECT Name as customername ,(SELECT MIN(OrderDate) FROM Orders)as OrderDate
+--6. Display all customers, even those who haven’t placed any orders. Select Customers.Name , Orders.OrderID , Orders.TotalAmountfrom CustomersLeft join Orderson Customers.CustomerID = Orders.CustomerID--7. Find authors who have not written any books select Authors.Namefrom Authorsleft join Bookson Books.AuthorID = Authors.AuthorIDwhere Books.BookID is Null--Assignment Day10--1. Find the customer(s) who placed the first order (earliest OrderDate). select * from customersselect * from Ordersselect c.*, o.OrderDate from customers cjoin Orders oon c.CustomerID = o.CustomerIDwhere OrderDate = (select min(OrderDate) from Orders)SELECT Name as customername ,(SELECT MIN(OrderDate) FROM Orders)as OrderDate
 FROM Customers 
 WHERE CustomerID = (
     SELECT CustomerID 
     FROM Orders 
     WHERE OrderDate = (SELECT MIN(OrderDate) FROM Orders)
 );
+
+select name 
+from Customers
+where CustomerID in
+(select customerid,min(orderdate)
+from Orders)
   SELECT c.Name AS CustomerName, o.OrderDate
 FROM Customers c, Orders o
 WHERE c.CustomerID = o.CustomerID
 AND o.OrderDate = (SELECT MIN(OrderDate) FROM Orders);
 
-
+select * from Customers ;
+select * from orders;
 
 --3. Find customers who have not placed any orders.
 SELECT * 
 FROM Customers 
 WHERE CustomerID NOT IN (SELECT DISTINCT CustomerID FROM Orders);
 
---4. Retrieve all books cheaper than the most expensive book written byselect 
+--4. Retrieve all books cheaper than the most expensive book written bySELECT * FROM Books WHERE Price < (SELECT MAX(Price) FROM Books)--5. List all customers whose total spending is greater than the average
+SELECT Customers.CustomerId, Name, TotalAmountFROM Customers JOIN OrdersON Customers.CustomerId = Orders.CustomerIdWHERE Customers.CustomerIdIN (SELECT CustomerId FROM Orders WHERE TotalAmount >(SELECT AVG(TotalAmount) FROM Orders))--Stored Procedures--1. Write a stored procedure that accepts a CustomerID and returns all orders
+--placed by that customer 
+CREATE PROC OrderDetailByCustomerId 
+@Id int
+AS
+BEGIN
+	SELECT * FROM Orders WHERE CustomerId = @Id
+END
+
+EXEC OrderDetailByCustomerId 3
+
+--2. Create a procedure that accepts MinPrice and MaxPrice as parameters
+--and returns all books within that range 
+CREATE PROC GetBookByMinAndMaxPrice
+@MinPrice int,
+@MaxPrice int
+AS
+BEGIN 
+	SELECT * FROM Books WHERE Price BETWEEN @MinPrice AND @MaxPrice
+END
+
+EXEC GetBookByMinAndMaxPrice 100, 250
+
+--Views
+--1.Create a view named AvailableBooks that shows only books that are in
+--stock, including BookID, Title, AuthorID, Price, and PublishedYear
+
+CREATE VIEW BookPublishedBefore2015
+AS
+	SELECT * FROM Books WHERE PublishedYear > 2015
+
+SELECT * FROM BookPublishedBefore2015
