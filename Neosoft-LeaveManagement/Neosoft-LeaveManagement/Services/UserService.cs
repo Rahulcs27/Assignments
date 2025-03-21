@@ -1,4 +1,5 @@
-﻿using Neosoft_LeaveManagement.Constants;
+﻿using Microsoft.EntityFrameworkCore;
+using Neosoft_LeaveManagement.Constants;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 
@@ -7,10 +8,12 @@ namespace Neosoft_LeaveManagement.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly DataContext _context;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository,DataContext context)
         {
             _userRepository = userRepository;
+            _context = context;
         }
 
         public async Task<User> Register(User user, UserRole role)
@@ -26,6 +29,17 @@ namespace Neosoft_LeaveManagement.Services
 
             await _userRepository.AddUserAsync(user);
             await _userRepository.SaveChangesAsync();
+
+            var leaveBalance = new LeaveBalance
+            {
+                UserId = user.UserId,
+                TotalLeaveDays = 20,
+                RemainingLeaveDays = 20,
+                LastUpdated = DateTime.UtcNow
+            };
+
+            _context.LeaveBalances.Add(leaveBalance);
+            await _context.SaveChangesAsync();
             return user;
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neosoft_LeaveManagement.Constants;
+using Neosoft_LeaveManagement.Exceptions;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 using Neosoft_LeaveManagement.ViewModels;
@@ -56,11 +57,30 @@ namespace Neosoft_LeaveManagement.Services
 
         public async Task ApplyLeaveAsync(LeaveRequest leaveRequest)
         {
-            Console.WriteLine($"Applying Leave: {leaveRequest.UserId}, {leaveRequest.StartDate}");
+            var leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(lb => lb.UserId == leaveRequest.UserId);
 
-            await _leaveRequestRepository.AddLeaveRequestAsync(leaveRequest);
-            await _leaveRequestRepository.SaveChangesAsync();
+            if (leaveBalance == null)
+            {
+                throw new Exception("Leave balance record not found.");
+            }
+
+            int requestedDays = (leaveRequest.EndDate - leaveRequest.StartDate).Days + 1;
+
+            if (leaveBalance.RemainingLeaveDays < requestedDays)
+            {
+                throw new LeaveBalanceExceededException();
+            }
+
+            leaveBalance.RemainingLeaveDays -= requestedDays;
+            leaveBalance.LastUpdated = DateTime.UtcNow;
+
+            _context.LeaveBalances.Update(leaveBalance);
+            await _context.SaveChangesAsync();
+
+            _context.LeaveRequests.Add(leaveRequest);
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task<IEnumerable<LeaveRequestViewModel>> GetPendingLeaveRequestsAsync()
         {

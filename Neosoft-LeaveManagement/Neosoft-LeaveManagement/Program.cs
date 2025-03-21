@@ -24,6 +24,8 @@ namespace Neosoft_LeaveManagement
             builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
             builder.Services.AddScoped<ILeaveApprovalRepository, LeaveApprovalRepository>();
             builder.Services.AddScoped<ILeaveApprovalService, LeaveApprovalService>();
+            builder.Services.AddScoped<ILeaveBalanceRepository, LeaveBalanceRepository>();
+
 
 
             var app = builder.Build();

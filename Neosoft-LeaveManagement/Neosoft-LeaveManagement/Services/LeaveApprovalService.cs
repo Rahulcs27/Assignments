@@ -1,4 +1,5 @@
-﻿using Neosoft_LeaveManagement.Constants;
+﻿using Microsoft.EntityFrameworkCore;
+using Neosoft_LeaveManagement.Constants;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 using Neosoft_LeaveManagement.ViewModels;
@@ -9,11 +10,13 @@ namespace Neosoft_LeaveManagement.Services
     {
         private readonly ILeaveApprovalRepository _leaveApprovalRepository;
         private readonly ILeaveRequestRepository _leaveRequestRepository;
+        private readonly DataContext _context;
 
-        public LeaveApprovalService(ILeaveApprovalRepository leaveApprovalRepository, ILeaveRequestRepository leaveRequestRepository)
+        public LeaveApprovalService(ILeaveApprovalRepository leaveApprovalRepository, ILeaveRequestRepository leaveRequestRepository,DataContext context)
         {
             _leaveApprovalRepository = leaveApprovalRepository;
             _leaveRequestRepository = leaveRequestRepository;
+            _context = context;
         }
 
         public async Task<bool> ApproveLeaveAsync(int leaveRequestId, int managerId, string comments)
@@ -32,6 +35,20 @@ namespace Neosoft_LeaveManagement.Services
             };
 
             await _leaveApprovalRepository.AddLeaveApprovalAsync(approval);
+
+     
+            if (leaveRequest == null)
+            {
+                throw new Exception("Leave request not found.");
+            }
+
+
+
+            leaveRequest.Status = LeaveStatus.Approved;
+
+            await _leaveRequestRepository.UpdateLeaveRequestAsync(leaveRequest);
+            await _context.SaveChangesAsync();
+
             return true;
         }
 

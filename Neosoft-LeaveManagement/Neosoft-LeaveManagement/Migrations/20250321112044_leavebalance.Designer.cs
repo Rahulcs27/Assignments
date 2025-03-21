@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Neosoft_LeaveManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250320072730_initial")]
-    partial class initial
+    [Migration("20250321112044_leavebalance")]
+    partial class leavebalance
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,6 +57,33 @@ namespace Neosoft_LeaveManagement.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("LeaveApprovals");
+                });
+
+            modelBuilder.Entity("Neosoft_LeaveManagement.Models.LeaveBalance", b =>
+                {
+                    b.Property<int>("BalanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BalanceId"), 1L, 1);
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RemainingLeaveDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalLeaveDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BalanceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LeaveBalances");
                 });
 
             modelBuilder.Entity("Neosoft_LeaveManagement.Models.LeaveRequest", b =>
@@ -152,6 +179,17 @@ namespace Neosoft_LeaveManagement.Migrations
                     b.Navigation("LeaveRequest");
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("Neosoft_LeaveManagement.Models.LeaveBalance", b =>
+                {
+                    b.HasOne("Neosoft_LeaveManagement.Models.User", "Employee")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Neosoft_LeaveManagement.Models.LeaveRequest", b =>

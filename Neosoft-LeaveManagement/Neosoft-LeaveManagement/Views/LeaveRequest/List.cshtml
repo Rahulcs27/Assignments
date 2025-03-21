@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Neosoft_LeaveManagement.ViewModels.LeaveRequestViewModel>
+﻿@model Neosoft_LeaveManagement.ViewModels.LeaveRequestListViewModel
 
 @{
     ViewData["Title"] = "List";
@@ -9,63 +9,40 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- ✅ Display Leave Balance using Partial View -->
+<partial name="_LeaveBalancePartial" model="Model.LeaveBalance" />
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reason)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AppliedDate)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().UserId)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().LeaveType)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().StartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().EndDate)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().Reason)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().Status)</th>
+            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().AppliedDate)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeaveType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reason)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+        @foreach (var item in Model.LeaveRequests)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+                <td>@Html.DisplayFor(modelItem => item.LeaveType)</td>
+                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Reason)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.AppliedDate)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AppliedDate)
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                 </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Neosoft_LeaveManagement.Migrations
 {
-    public partial class initial : Migration
+    public partial class leavebalance : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +23,28 @@ namespace Neosoft_LeaveManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveBalances",
+                columns: table => new
+                {
+                    BalanceId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TotalLeaveDays = table.Column<int>(type: "int", nullable: false),
+                    RemainingLeaveDays = table.Column<int>(type: "int", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveBalances", x => x.BalanceId);
+                    table.ForeignKey(
+                        name: "FK_LeaveBalances_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,6 +118,11 @@ namespace Neosoft_LeaveManagement.Migrations
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LeaveBalances_UserId",
+                table: "LeaveBalances",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LeaveRequests_UserId",
                 table: "LeaveRequests",
                 column: "UserId");
@@ -105,6 +132,9 @@ namespace Neosoft_LeaveManagement.Migrations
         {
             migrationBuilder.DropTable(
                 name: "LeaveApprovals");
+
+            migrationBuilder.DropTable(
+                name: "LeaveBalances");
 
             migrationBuilder.DropTable(
                 name: "LeaveRequests");

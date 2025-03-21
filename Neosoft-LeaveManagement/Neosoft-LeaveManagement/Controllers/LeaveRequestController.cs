@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Neosoft_LeaveManagement.Constants;
+using Neosoft_LeaveManagement.Exceptions;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 using Neosoft_LeaveManagement.ViewModels;
@@ -14,11 +15,13 @@ namespace Neosoft_LeaveManagement.Controllers
     {
         private readonly ILeaveRequestService _leaveRequestService;
         private readonly DataContext _context;
+        private readonly ILeaveBalanceRepository _leaveBalanceRepository;
 
-        public LeaveRequestController(ILeaveRequestService leaveRequestService, DataContext context) 
+        public LeaveRequestController(ILeaveRequestService leaveRequestService,ILeaveBalanceRepository leaveBalanceRepository, DataContext context) 
         {
             _leaveRequestService = leaveRequestService;
             _context = context; 
+            _leaveBalanceRepository = leaveBalanceRepository;
         }
 
         [HttpGet]
@@ -54,16 +57,17 @@ namespace Neosoft_LeaveManagement.Controllers
 
                 await _leaveRequestService.ApplyLeaveAsync(leaveRequest);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Leave request submitted successfully!";
+
                 return RedirectToAction("List");
             }
-            catch (Exception ex)
+            catch (LeaveBalanceExceededException ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                TempData["ErrorMessage"] = ex.Message;
                 return View(model);
             }
         }
 
-        // Display All Leave Requests for the Logged-in User
         public async Task<IActionResult> List()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -73,6 +77,7 @@ namespace Neosoft_LeaveManagement.Controllers
                 return RedirectToAction("Login", "User");
             }
 
+            // ✅ Fetch Leave Requests
             var leaveRequests = await _leaveRequestService.GetLeaveRequestsByUserIdAsync(userId.Value);
             var leaveRequestViewModels = leaveRequests.Select(lr => new LeaveRequestViewModel
             {
@@ -86,7 +91,23 @@ namespace Neosoft_LeaveManagement.Controllers
                 AppliedDate = lr.AppliedDate
             }).ToList();
 
-            return View(leaveRequestViewModels);
+            // ✅ Fetch Leave Balance
+            var leaveBalance = await _leaveBalanceRepository.GetLeaveBalanceByUserIdAsync(userId.Value);
+            var leaveBalanceViewModel = new LeaveBalanceViewModel
+            {
+                TotalLeaveDays = leaveBalance?.TotalLeaveDays ?? 0,
+                RemainingLeaveDays = leaveBalance?.RemainingLeaveDays ?? 0
+            };
+
+            // ✅ Combine into ViewModel
+            var viewModel = new LeaveRequestListViewModel
+            {
+                LeaveRequests = leaveRequestViewModels,
+                LeaveBalance = leaveBalanceViewModel
+            };
+
+            return View(viewModel);
         }
+
     }
 }

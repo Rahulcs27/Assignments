@@ -10,6 +10,8 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<LeaveRequest> LeaveRequests { get; set; }
     public DbSet<LeaveApproval> LeaveApprovals { get; set; }
+    public DbSet<LeaveBalance> LeaveBalances { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
