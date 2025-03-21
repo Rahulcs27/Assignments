@@ -1,0 +1,20 @@
+﻿@model Neosoft_LeaveManagement.Models.User
+
+<h2>Profile</h2>
+
+<table class="table">
+    <tr>
+        <th>Name:</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th>Email:</th>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <th>Role:</th>
+        <td>@Model.Role</td>
+    </tr>
+</table>
+
+<a class="btn btn-primary" asp-action="Index" asp-controller="Home">Back to Home</a>

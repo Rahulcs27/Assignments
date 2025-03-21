@@ -1,4 +1,6 @@
 ﻿@using Neosoft_LeaveManagement.Constants
+@inject IHttpContextAccessor HttpContextAccessor
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,68 +13,95 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Neosoft_LeaveManagement</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Neosoft_LeaveManagement</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @{
-                            if (Context.Session.GetInt32("UserId") > 0)
-                            {
-                                if (Context.Session.GetInt32("UserRole") == (int)UserRole.Employee)
-                                {
-                                <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
-                                        </li>
-                                }
-                                if (Context.Session.GetInt32("UserRole") == (int)UserRole.Admin)
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ManageUsers">Manage User Roles</a>
-                                    </li>
-                  
-                                }
-                                if (Context.Session.GetInt32("UserRole") == (int)UserRole.Manager)
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveApproval" asp-action="Index">Leave Approval Dashboard</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="List">View All Leaves</a>
-                                    </li>
-                                }
-                                
-                                <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
-                                    </li>
 
-                                }
-                         }
+                <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                    <ul class="navbar-nav">
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("UserId") != null)
+                        {
+                            var userRole = HttpContextAccessor.HttpContext.Session.GetInt32("UserRole");
+                            var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+
+                            @if (userRole == (int)UserRole.Employee)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
+                                </li>
+                            }
+
+                            @if (userRole == (int)UserRole.Manager)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="LeaveApproval" asp-action="Index">Leave Approval Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
+                                </li>
+                            }
+
+                            @if (userRole == (int)UserRole.Admin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="ManageUsers">Manage User Roles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="AllLeaves">All Leaves</a>
+                                </li>
+                            }
+                        }
                     </ul>
 
-               </div>
+                    <ul class="navbar-nav ms-auto">
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("UserId") != null)
+                        {
+                            var userRole = HttpContextAccessor.HttpContext.Session.GetInt32("UserRole");
+                            var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <strong>@userName</strong> (@((UserRole)userRole))
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Profile">View Profile</a></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="User" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            if(Context.GetRouteData().Values["action"].ToString() != "Login"){
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-primary text-white" asp-controller="User" asp-action="Login">Login</a>
+                                </li>
+                            }
+                            if (Context.GetRouteData().Values["action"].ToString() != "Register")
+							{
+								<li class="nav-item">
+									<a class="nav-link btn btn-secondary text-white" asp-controller="User" asp-action="Register">Register</a>
+								</li>
+							}
+                            
+                            
+                        }
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -81,9 +110,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Neosoft_LeaveManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Neosoft_LeaveManagement - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

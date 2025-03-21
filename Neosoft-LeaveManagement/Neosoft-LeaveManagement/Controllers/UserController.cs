@@ -24,6 +24,7 @@ namespace Neosoft_LeaveManagement.Controllers
 
             try
             {
+                
                 await _userService.Register(new User
                 {
                     Name = model.Name,
@@ -55,6 +56,7 @@ namespace Neosoft_LeaveManagement.Controllers
                 if (user != null)
                 {
                     HttpContext.Session.SetInt32("UserId", user.UserId);
+                    HttpContext.Session.SetString("Name", user.Name);
                     HttpContext.Session.SetInt32("UserRole", (int)user.Role);
                     return RedirectToAction("Index", "Home");
                 }
@@ -72,6 +74,18 @@ namespace Neosoft_LeaveManagement.Controllers
                 return View(model);
             }
         }
+        public async Task<IActionResult> Profile()
+    {
+        var userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+            return RedirectToAction("Login");
+
+        var user = await _userService.GetUserByIdAsync(userId.Value);
+        if (user == null)
+            return NotFound();
+
+        return View(user);
+    }
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

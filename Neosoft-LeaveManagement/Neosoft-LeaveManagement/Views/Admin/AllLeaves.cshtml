@@ -1,0 +1,32 @@
+﻿@model IEnumerable<dynamic>
+
+<h2>All Leave Requests</h2>
+
+<form method="get">
+    <input type="text" name="searchUser" placeholder="Search Employee" value="@Context.Request.Query["searchUser"]" />
+
+    <label><input type="checkbox" name="statusFilter" value="Pending" @(Context.Request.Query["statusFilter"] == "Pending" ? "checked" : "") /> Pending</label>
+    <label><input type="checkbox" name="statusFilter" value="Approved" @(Context.Request.Query["statusFilter"] == "Approved" ? "checked" : "") /> Approved</label>
+
+    <button type="submit">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Status</th>
+            <th>Approved By</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var leave in Model)
+        {
+            <tr>
+                <td>@leave.EmployeeName</td>
+                <td>@leave.Status</td>
+                <td>@leave.ManagerName</td>
+            </tr>
+        }
+    </tbody>
+</table>

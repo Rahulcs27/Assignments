@@ -7,5 +7,6 @@ namespace Neosoft_LeaveManagement.Interfaces
     {
         Task<User> Register(User user, UserRole role);
         Task<User> Login(string email, string password);
+        Task<User> GetUserByIdAsync(int userId);
     }
 }

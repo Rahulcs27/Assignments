@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Neosoft_LeaveManagement.Constants;
 using Neosoft_LeaveManagement.Interfaces;
 
@@ -7,10 +8,11 @@ namespace Neosoft_LeaveManagement.Controllers
     public class AdminController : Controller
     {
         private readonly IUserRepository _userRepository;
-
-        public AdminController(IUserRepository userRepository)
+        private readonly DataContext _context;
+        public AdminController(IUserRepository userRepository,DataContext context)
         {
             _userRepository = userRepository;
+            _context = context;
         }
 
         public async Task<IActionResult> ManageUsers()
@@ -30,5 +32,33 @@ namespace Neosoft_LeaveManagement.Controllers
             }
             return RedirectToAction("ManageUsers");
         }
+        public IActionResult AllLeaves(string statusFilter, string searchUser)
+        {
+            var leaves = _context.LeaveApprovals
+                .Include(l => l.LeaveRequest)
+                .Include(l => l.Manager)
+                .Select(l => new
+                {
+                    LeaveId = l.LeaveRequestId,
+                    EmployeeName = l.LeaveRequest.Employee.Name,
+                    Status = l.ApprovalStatus == ApprovalStatus.Approved ? "Approved" : "Pending",
+                    ManagerName = l.Manager.Name
+                })
+                .ToList();
+
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                leaves = leaves.Where(l => l.Status == statusFilter).ToList();
+            }
+
+            //Search Filter
+            if (!string.IsNullOrEmpty(searchUser))
+            {
+                leaves = leaves.Where(l => l.EmployeeName.Contains(searchUser, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return View(leaves);
+        }
+
     }
 }

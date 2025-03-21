@@ -29,6 +29,7 @@ namespace Neosoft_LeaveManagement.Services
             return user;
         }
 
+
         public async Task<User> Login(string email, string password)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
@@ -36,6 +37,10 @@ namespace Neosoft_LeaveManagement.Services
                 throw new Exception("Invalid credentials.");
 
             return user;
+        }
+        public async Task<User> GetUserByIdAsync(int userId)
+        {
+            return await _userRepository.GetUserByIdAsync(userId);
         }
     }
 }
