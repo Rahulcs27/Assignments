@@ -1,48 +1,64 @@
 ﻿@model Neosoft_LeaveManagement.ViewModels.LeaveRequestListViewModel
+@using Neosoft_LeaveManagement.Constants
 
 @{
     ViewData["Title"] = "List";
 }
 
-<h1>List</h1>
+<h1>My Leave Requests</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Apply for Leave</a>
 </p>
 
 <!-- ✅ Display Leave Balance using Partial View -->
 <partial name="_LeaveBalancePartial" model="Model.LeaveBalance" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().UserId)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().LeaveType)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().StartDate)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().EndDate)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().Reason)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().Status)</th>
-            <th>@Html.DisplayNameFor(model => model.LeaveRequests.First().AppliedDate)</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.LeaveRequests)
-        {
+@if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.UserId)</td>
-                <td>@Html.DisplayFor(modelItem => item.LeaveType)</td>
-                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.Reason)</td>
-                <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                <td>@Html.DisplayFor(modelItem => item.AppliedDate)</td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                <th>User ID</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Applied Date</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.LeaveRequests)
+            {
+                <tr>
+                    <td>@item.UserId</td>
+                    <td>@item.LeaveType</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>@item.Reason</td>
+                    <td>@item.Status</td>
+                    <td>@item.AppliedDate.ToShortDateString()</td>
+                    <td>
+                        @if (item.Status != LeaveStatus.Approved)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <form asp-action="Cancel" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Not Editable</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No leave requests found.</p>
+}

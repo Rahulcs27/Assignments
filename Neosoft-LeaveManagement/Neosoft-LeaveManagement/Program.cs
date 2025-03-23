@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Neosoft_LeaveManagement.Filters;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Repositories;
 using Neosoft_LeaveManagement.Services;
@@ -11,7 +12,10 @@ namespace Neosoft_LeaveManagement
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new ExceptionHandlingAttribute());
+            });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession();
 

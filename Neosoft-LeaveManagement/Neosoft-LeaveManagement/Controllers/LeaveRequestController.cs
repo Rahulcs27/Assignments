@@ -77,7 +77,6 @@ namespace Neosoft_LeaveManagement.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            // ✅ Fetch Leave Requests
             var leaveRequests = await _leaveRequestService.GetLeaveRequestsByUserIdAsync(userId.Value);
             var leaveRequestViewModels = leaveRequests.Select(lr => new LeaveRequestViewModel
             {
@@ -91,7 +90,6 @@ namespace Neosoft_LeaveManagement.Controllers
                 AppliedDate = lr.AppliedDate
             }).ToList();
 
-            // ✅ Fetch Leave Balance
             var leaveBalance = await _leaveBalanceRepository.GetLeaveBalanceByUserIdAsync(userId.Value);
             var leaveBalanceViewModel = new LeaveBalanceViewModel
             {
@@ -99,7 +97,6 @@ namespace Neosoft_LeaveManagement.Controllers
                 RemainingLeaveDays = leaveBalance?.RemainingLeaveDays ?? 0
             };
 
-            // ✅ Combine into ViewModel
             var viewModel = new LeaveRequestListViewModel
             {
                 LeaveRequests = leaveRequestViewModels,
@@ -107,6 +104,78 @@ namespace Neosoft_LeaveManagement.Controllers
             };
 
             return View(viewModel);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var leaveRequest = await _leaveRequestService.GetLeaveRequestByIdAsync(id);
+            if (leaveRequest == null)
+            {
+                return NotFound();
+            }
+
+            var model = new LeaveRequestViewModel
+            {
+                Id = leaveRequest.LeaveRequestId,
+                LeaveType = leaveRequest.LeaveType,
+                StartDate = leaveRequest.StartDate,
+                EndDate = leaveRequest.EndDate,
+                Reason = leaveRequest.Reason
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, LeaveRequestViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var existingRequest = await _leaveRequestService.GetLeaveRequestByIdAsync(id);
+                if (existingRequest == null)
+                {
+                    TempData["ErrorMessage"] = "Leave request not found!";
+                    return RedirectToAction("List");
+                }
+
+                // Preserve status, only update editable fields
+                existingRequest.LeaveType = model.LeaveType;
+                existingRequest.StartDate = model.StartDate;
+                existingRequest.EndDate = model.EndDate;
+                existingRequest.Reason = model.Reason;
+
+                await _leaveRequestService.UpdateLeaveRequestAsync(id, existingRequest);
+
+                TempData["SuccessMessage"] = "Leave request updated successfully!";
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                return View(model);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            try
+            {
+                await _leaveRequestService.CancelLeaveRequestAsync(id);
+                TempData["SuccessMessage"] = "Leave request canceled successfully!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction("List");
         }
 
     }

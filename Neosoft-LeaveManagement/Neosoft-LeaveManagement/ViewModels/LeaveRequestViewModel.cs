@@ -8,7 +8,7 @@ namespace Neosoft_LeaveManagement.ViewModels
         public int Id { get; set; } 
 
         public int UserId { get; set; }
-        public string EmployeeName { get; set; }
+        public string? EmployeeName { get; set; }
 
         [Required]
         [EnumDataType(typeof(LeaveType))]

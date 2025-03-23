@@ -80,7 +80,41 @@ namespace Neosoft_LeaveManagement.Services
             _context.LeaveRequests.Add(leaveRequest);
             await _context.SaveChangesAsync();
         }
+        public async Task CancelLeaveRequestAsync(int id)
+        {
+            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
+            if (leaveRequest == null)
+            {
+                throw new Exception("Leave request not found.");
+            }
 
+            if (leaveRequest.Status == LeaveStatus.Approved)
+            {
+                throw new Exception("Cannot cancel an approved leave request.");
+            }
+
+            _context.LeaveRequests.Remove(leaveRequest);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<bool> UpdateLeaveRequestAsync(int id, LeaveRequest leaveRequest)
+        {
+            var existingRequest = await _context.LeaveRequests.FindAsync(id);
+            if (existingRequest == null)
+            {
+                return false;
+            }
+
+            // Preserve status and update other fields
+            existingRequest.LeaveType = leaveRequest.LeaveType;
+            existingRequest.StartDate = leaveRequest.StartDate;
+            existingRequest.EndDate = leaveRequest.EndDate;
+            existingRequest.Reason = leaveRequest.Reason;
+
+            _context.LeaveRequests.Update(existingRequest);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
 
         public async Task<IEnumerable<LeaveRequestViewModel>> GetPendingLeaveRequestsAsync()
         {
