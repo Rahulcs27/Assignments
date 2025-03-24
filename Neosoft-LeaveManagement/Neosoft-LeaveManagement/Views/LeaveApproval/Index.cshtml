@@ -4,41 +4,39 @@
     ViewData["Title"] = "Leave Approval";
 }
 
-<h2>Leave Approval</h2>
+<h2 class="mb-4 text-primary">Leave Approval</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Employee Name</th>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Reason</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var request in Model)
-        {
-            <tr>
-                <td>@request.EmployeeName</td> 
-                <td>@request.LeaveType</td>
-                <td>@request.StartDate.ToShortDateString()</td>
-                <td>@request.EndDate.ToShortDateString()</td>
-                <td>@request.Reason</td>
-                <td>
-                    <form asp-action="Approve" method="post">
-                        <input type="hidden" name="leaveRequestId" value="@request.Id" />
-                        <input type="text" name="comments" placeholder="Add comments" required />
-                        <button type="submit" class="btn btn-success">Approve</button>
-                    </form>
-                    <form asp-action="Reject" method="post">
-                        <input type="hidden" name="leaveRequestId" value="@request.Id" />
-                        <input type="text" name="comments" placeholder="Add comments" required />
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="row">
+    @foreach (var request in Model)
+    {
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 mb-3">
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark">@request.EmployeeName</h5>
+                    <p class="text-muted mb-1"><i class="bi bi-calendar"></i> <strong>Leave Type:</strong> @request.LeaveType</p>
+                    <p class="text-muted mb-1"><i class="bi bi-calendar-event"></i> <strong>From:</strong> @request.StartDate.ToShortDateString()</p>
+                    <p class="text-muted mb-1"><i class="bi bi-calendar-event"></i> <strong>To:</strong> @request.EndDate.ToShortDateString()</p>
+                    <p class="text-muted"><i class="bi bi-chat-left-text"></i> <strong>Reason:</strong> @request.Reason</p>
+
+                    <div class="d-flex gap-2">
+                        <form asp-action="Approve" method="post" class="flex-grow-1">
+                            <input type="hidden" name="leaveRequestId" value="@request.Id" />
+                            <input type="text" name="comments" class="form-control mb-2" placeholder="Add comments" required />
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-check-circle"></i> Approve
+                            </button>
+                        </form>
+
+                        <form asp-action="Reject" method="post" class="flex-grow-1">
+                            <input type="hidden" name="leaveRequestId" value="@request.Id" />
+                            <input type="text" name="comments" class="form-control mb-2" placeholder="Add comments" required />
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="bi bi-x-circle"></i> Reject
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

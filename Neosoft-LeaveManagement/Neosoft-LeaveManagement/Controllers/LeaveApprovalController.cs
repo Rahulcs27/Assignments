@@ -7,7 +7,6 @@ using Neosoft_LeaveManagement.Services;
 
 namespace Neosoft_LeaveManagement.Controllers
 {
-    [ServiceFilter(typeof(RequireLoginFilter))]
     [ServiceFilter(typeof(ManagerRoleFilter))]
     public class LeaveApprovalController : Controller
     {

@@ -2,61 +2,71 @@
 @model Neosoft_LeaveManagement.ViewModels.LeaveRequestViewModel
 
 @{
-    ViewData["Title"] = "Apply";
+    ViewData["Title"] = "Apply Leave";
     ViewBag.UserId = Context.Session.GetInt32("UserId");
 }
 
-<h1>Apply</h1>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4 shadow-sm" style="max-width: 500px; width: 100%; border-radius: 12px;">
+        <h3 class="text-center mb-3" style="font-weight: 600; color: #333;">Apply for Leave</h3>
 
-<h4>LeaveRequestViewModel</h4>
-<hr />
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
-}
-<div class="row">
-    <div class="col-md-4">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center" style="border-radius: 8px;">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
         <form asp-action="Apply" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="LeaveType" class="control-label"></label>
-                <select asp-for="LeaveType" class="form-control">
-                    <option value="0">--Select your LeaveType--</option>
+                <label asp-for="LeaveType" class="small font-weight-bold">Leave Type</label>
+                <select asp-for="LeaveType" class="form-control rounded-pill px-3" style="border: 1px solid #ddd;">
+                    <option value="0">-- Select Leave Type --</option>
                     @foreach (var type in Enum.GetValues(typeof(LeaveType)))
                     {
                         <option value="@type">@type</option>
                     }
                 </select>
-                <span asp-validation-for="LeaveType" class="text-danger"></span>
+                <span asp-validation-for="LeaveType" class="text-danger small"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="StartDate" class="small font-weight-bold">Start Date</label>
+                <input asp-for="StartDate" class="form-control rounded-pill px-3 datepicker" placeholder="YYYY-MM-DD" style="border: 1px solid #ddd;">
+                <span asp-validation-for="StartDate" class="text-danger small"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="EndDate" class="small font-weight-bold">End Date</label>
+                <input asp-for="EndDate" class="form-control rounded-pill px-3 datepicker" placeholder="YYYY-MM-DD" style="border: 1px solid #ddd;">
+                <span asp-validation-for="EndDate" class="text-danger small"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Reason" class="control-label"></label>
-                <input asp-for="Reason" class="form-control" />
-                <span asp-validation-for="Reason" class="text-danger"></span>
+                <label asp-for="Reason" class="small font-weight-bold">Reason</label>
+                <textarea asp-for="Reason" class="form-control px-3 py-2" rows="3" placeholder="Enter reason..." style="border: 1px solid #ddd; border-radius: 10px;"></textarea>
+                <span asp-validation-for="Reason" class="text-danger small"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-light rounded-pill px-4" style="border: 1px solid #ddd;">Cancel</a>
+                <button type="submit" class="btn btn-primary rounded-pill px-4">Apply</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                format: "yyyy-mm-dd",
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
 }

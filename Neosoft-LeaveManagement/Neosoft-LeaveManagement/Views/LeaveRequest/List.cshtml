@@ -2,63 +2,94 @@
 @using Neosoft_LeaveManagement.Constants
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "My Leave Requests";
 }
 
-<h1>My Leave Requests</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark">My Leave Requests</h2>
+        <a asp-action="Apply" asp-controller="LeaveRequest" class="btn btn-primary rounded-pill px-4">+ Apply for Leave</a>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Apply for Leave</a>
-</p>
+    <!-- ✅ Leave Balance Display (Partial View) -->
+    <div class="mb-3">
+        <partial name="_LeaveBalancePartial" model="Model.LeaveBalance" />
+    </div>
 
-<!-- ✅ Display Leave Balance using Partial View -->
-<partial name="_LeaveBalancePartial" model="Model.LeaveBalance" />
+    @if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm bg-white rounded">
+                <thead class="bg-light">
+                    <tr>
+                        <th>User ID</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Applied Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LeaveRequests)
+                    {
+                        <tr>
+                            <td>@item.UserId</td>
+                            <td>@item.LeaveType</td>
+                            <td>@item.StartDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.EndDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.Reason</td>
+                            <td>
+                                <span class="badge @(GetStatusBadgeClass(item.Status))">
+                                    @item.Status
+                                </span>
+                            </td>
+                            <td>@item.AppliedDate.ToString("dd-MMM-yyyy")</td>
+                            <td>
+                                @if (item.Status != LeaveStatus.Approved)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm rounded-pill px-3">Edit</a>
+                                    <form asp-action="Cancel" asp-route-id="@item.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Cancel</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Not Editable</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted text-center mt-4">No leave requests found.</p>
+    }
+</div>
 
-@if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Leave Type</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Applied Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.LeaveRequests)
-            {
-                <tr>
-                    <td>@item.UserId</td>
-                    <td>@item.LeaveType</td>
-                    <td>@item.StartDate.ToShortDateString()</td>
-                    <td>@item.EndDate.ToShortDateString()</td>
-                    <td>@item.Reason</td>
-                    <td>@item.Status</td>
-                    <td>@item.AppliedDate.ToShortDateString()</td>
-                    <td>
-                        @if (item.Status != LeaveStatus.Approved)
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
-                            <form asp-action="Cancel" asp-route-id="@item.Id" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <span class="text-muted">Not Editable</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".table").addClass("table-striped");
+        });
+    </script>
 }
-else
-{
-    <p class="text-muted">No leave requests found.</p>
+
+@functions {
+    string GetStatusBadgeClass(LeaveStatus status)
+    {
+        return status switch
+        {
+            LeaveStatus.Pending => "bg-warning text-dark",
+            LeaveStatus.Approved => "bg-success text-white",
+            LeaveStatus.Rejected => "bg-danger text-white",
+            LeaveStatus.Canceled => "bg-secondary text-white",
+            _ => "bg-light text-dark"
+        };
+    }
 }

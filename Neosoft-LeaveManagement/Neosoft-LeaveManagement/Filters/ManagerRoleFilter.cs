@@ -6,18 +6,19 @@ public class ManagerRoleFilter : IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var user = context.HttpContext.User;
+        var user = context.HttpContext.Session.GetInt32("UserRole");
+
+        //if (!user.Identity.IsAuthenticated)
+        //{
+        //    context.Result = new RedirectToActionResult("Login", "User", null);
+        //    return;
+        //}
+
         // Block access for employees
-        if (user.IsInRole("Employee"))
+        if (user != 2)
         {
             context.Result = new RedirectToActionResult("Login", "User", null);
             return;
-        }
-
-        // Allow only Managers and Admins
-        if (!user.IsInRole("Manager") && !user.IsInRole("Admin"))
-        {
-            context.Result = new RedirectToActionResult("Login", "User", null);
         }
     }
 }
