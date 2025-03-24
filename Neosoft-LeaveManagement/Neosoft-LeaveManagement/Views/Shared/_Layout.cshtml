@@ -6,16 +6,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Neosoft_LeaveManagement</title>
+    <title>@ViewData["Title"] - Neosoft Leave Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Neosoft_LeaveManagement.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Neosoft LeaveManagement</a>
+                <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">
+                    Neosoft Leave Management
+                </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,33 +34,33 @@
                             @if (userRole == (int)UserRole.Employee)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
+                                    <a class="nav-link" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
+                                    <a class="nav-link" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
                                 </li>
                             }
 
                             @if (userRole == (int)UserRole.Manager)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="LeaveApproval" asp-action="Index">Leave Approval Dashboard</a>
+                                    <a class="nav-link" asp-controller="LeaveApproval" asp-action="Index">Leave Approvals</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
+                                    <a class="nav-link" asp-controller="LeaveRequest" asp-action="Apply">Apply Leave</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
+                                    <a class="nav-link" asp-controller="LeaveRequest" asp-action="List">View My Leaves</a>
                                 </li>
                             }
 
                             @if (userRole == (int)UserRole.Admin)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="ManageUsers">Manage User Roles</a>
+                                    <a class="nav-link" asp-controller="Admin" asp-action="ManageUsers">Manage Users</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="AllLeaves">All Leaves</a>
+                                    <a class="nav-link" asp-controller="Admin" asp-action="AllLeaves">All Leaves</a>
                                 </li>
                             }
                         }
@@ -73,9 +75,9 @@
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <!-- ✅ Display Profile Picture -->
-                                    <img src="@(!string.IsNullOrEmpty(profilePicture) ? profilePicture : "/images/default-user.png")" class="rounded-circle" width="40" height="40" alt="Profile">
-                                    <span class="ms-2"><strong>@userName</strong> (@((UserRole)userRole))</span>
+                                    <img src="@(!string.IsNullOrEmpty(profilePicture) ? profilePicture : "/images/default-user.png")"
+                                         class="rounded-circle border me-2" width="40" height="40" alt="Profile">
+                                    <strong>@userName</strong> (@((UserRole)userRole))
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="Profile">View Profile</a></li>
@@ -88,13 +90,13 @@
                             if (Context.GetRouteData().Values["action"].ToString() != "Login")
                             {
                                 <li class="nav-item">
-                                    <a class="btn btn-outline-success ms-2" asp-controller="User" asp-action="Login">Login</a>
+                                    <a class="btn btn-outline-primary me-2" asp-controller="User" asp-action="Login">Login</a>
                                 </li>
                             }
                             if (Context.GetRouteData().Values["action"].ToString() != "Register")
                             {
                                 <li class="nav-item">
-                                    <a class="btn btn-outline-success ms-2" asp-controller="User" asp-action="Register">Register</a>
+                                    <a class="btn btn-outline-primary" asp-controller="User" asp-action="Register">Register</a>
                                 </li>
                             }
                         }
@@ -104,15 +106,15 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Neosoft_LeaveManagement - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted mt-4 py-3">
+        <div class="container text-center">
+            &copy; 2025 - Neosoft Leave Management | <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
         </div>
     </footer>
 
