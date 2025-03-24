@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neosoft_LeaveManagement.Constants;
+using Neosoft_LeaveManagement.Filters;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Services;
 
 namespace Neosoft_LeaveManagement.Controllers
 {
+    [ServiceFilter(typeof(RequireLoginFilter))]
+    [ServiceFilter(typeof(ManagerRoleFilter))]
     public class LeaveApprovalController : Controller
     {
         private readonly ILeaveApprovalService _leaveApprovalService;

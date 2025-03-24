@@ -16,3 +16,47 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.gradient-custom-2 {
+    /* Fallback color #fccb90 */
+    background: #ffffff;
+    /* Chrome, Safari */
+    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    /* Standard */
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+/* Ensure form inputs and buttons are aligned properly */
+.form-outline input,
+.form-outline button {
+    width: 100%;
+}
+
+/* Add spacing between Log in and Forgot Password */
+.text-center .btn {
+    display: inline-block;
+}
+
+.text-center a {
+    margin-left: 10px;
+}
+
+/* Make the Login Page Full-Screen */
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh !important;
+    }
+}
+
+/* Fix Button Alignment Issues */
+@media (min-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: .3rem;
+        border-bottom-right-radius: .3rem;
+    }
+
+    .d-flex.align-items-center .btn {
+        padding: 8px 16px;
+    }
+}

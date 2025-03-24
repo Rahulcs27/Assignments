@@ -12,7 +12,7 @@ namespace Neosoft_LeaveManagement.Interfaces
         Task DeleteLeaveRequestAsync(int requestId);
         Task ApplyLeaveAsync(LeaveRequest leaveRequest);
         Task<IEnumerable<LeaveRequestViewModel>> GetPendingLeaveRequestsAsync();
-        Task CancelLeaveRequestAsync(int id);
+        Task <bool>CancelLeaveRequestAsync(int id);
         Task<bool> UpdateLeaveRequestAsync(int id, LeaveRequest leaveRequest);
     }
 }

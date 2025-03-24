@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neosoft_LeaveManagement.Constants;
+using Neosoft_LeaveManagement.Filters;
 using Neosoft_LeaveManagement.Interfaces;
 
 namespace Neosoft_LeaveManagement.Controllers
 {
+    [ServiceFilter(typeof(RequireLoginFilter))]
     public class AdminController : Controller
     {
         private readonly IUserRepository _userRepository;

@@ -14,7 +14,7 @@ namespace Neosoft_LeaveManagement.Models
         [Required, EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [Required,RegularExpression("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$")]
         public string Password { get; set; }
 
         [Required]
@@ -22,6 +22,9 @@ namespace Neosoft_LeaveManagement.Models
 
         public ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
         public ICollection<LeaveApproval>LeaveApprovals { get; set; } = new List<LeaveApproval>();
+
+        public string? ProfilePicture { get; set; }
+
 
     }
 }

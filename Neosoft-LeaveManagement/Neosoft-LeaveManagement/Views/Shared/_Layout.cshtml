@@ -58,9 +58,7 @@
                                     <a class="nav-link text-dark" asp-controller="Admin" asp-action="ManageUsers">Manage User Roles</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="AllLeaves">All Leaves
-
-                                    </a>
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="AllLeaves">All Leaves</a>
                                 </li>
                             }
                         }
@@ -71,10 +69,13 @@
                         {
                             var userRole = HttpContextAccessor.HttpContext.Session.GetInt32("UserRole");
                             var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+                            var profilePicture = HttpContextAccessor.HttpContext.Session.GetString("ProfilePicture");
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <strong>@userName</strong> (@((UserRole)userRole))
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <!-- ✅ Display Profile Picture -->
+                                    <img src="@(!string.IsNullOrEmpty(profilePicture) ? profilePicture : "/images/default-user.png")" class="rounded-circle" width="40" height="40" alt="Profile">
+                                    <span class="ms-2"><strong>@userName</strong> (@((UserRole)userRole))</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="Profile">View Profile</a></li>
@@ -84,19 +85,18 @@
                         }
                         else
                         {
-                            if(Context.GetRouteData().Values["action"].ToString() != "Login"){
+                            if (Context.GetRouteData().Values["action"].ToString() != "Login")
+                            {
                                 <li class="nav-item">
-                                    <a class="nav-link btn btn-primary text-white" asp-controller="User" asp-action="Login">Login</a>
+                                    <a class="btn btn-outline-success ms-2" asp-controller="User" asp-action="Login">Login</a>
                                 </li>
                             }
                             if (Context.GetRouteData().Values["action"].ToString() != "Register")
-							{
-								<li class="nav-item">
-									<a class="nav-link btn btn-secondary text-white" asp-controller="User" asp-action="Register">Register</a>
-								</li>
-							}
-                            
-                            
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-success ms-2" asp-controller="User" asp-action="Register">Register</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

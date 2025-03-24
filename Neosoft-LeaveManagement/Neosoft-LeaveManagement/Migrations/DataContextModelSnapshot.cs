@@ -142,6 +142,9 @@ namespace Neosoft_LeaveManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -155,7 +158,7 @@ namespace Neosoft_LeaveManagement.Migrations
                             UserId = 1,
                             Email = "admin@neosoftmail.com",
                             Name = "Admin",
-                            Password = "admin123",
+                            Password = "Admin@123",
                             Role = 0
                         });
                 });

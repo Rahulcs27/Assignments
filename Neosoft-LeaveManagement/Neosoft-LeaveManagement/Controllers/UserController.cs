@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Neosoft_LeaveManagement.Constants;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 using Neosoft_LeaveManagement.ViewModels;
@@ -15,32 +16,54 @@ namespace Neosoft_LeaveManagement.Controllers
         }
 
         public IActionResult Register() => View();
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
             try
             {
-                
-                await _userService.Register(new User
+                string profilePicturePath = null;
+
+                if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = $"{Guid.NewGuid()}_{model.ProfilePicture.FileName}";
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ProfilePicture.CopyToAsync(stream);
+                    }
+
+                    profilePicturePath = "/uploads/" + uniqueFileName;
+                }
+
+                var newUser = new User
                 {
                     Name = model.Name,
                     Email = model.Email,
                     Password = model.Password,
-                    Role =  Constants.UserRole.Employee
-                }, Constants.UserRole.Employee);
+                    Role = UserRole.Employee,
+                    ProfilePicture = profilePicturePath 
+                };
+
+                await _userService.Register(newUser, UserRole.Employee);
 
                 return RedirectToAction("Login");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
         }
+
 
         public IActionResult Login() => View();
 
@@ -58,6 +81,10 @@ namespace Neosoft_LeaveManagement.Controllers
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("Name", user.Name);
                     HttpContext.Session.SetInt32("UserRole", (int)user.Role);
+                    if (!string.IsNullOrEmpty(user.ProfilePicture))
+                    {
+                        HttpContext.Session.SetString("ProfilePicture", user.ProfilePicture);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 else

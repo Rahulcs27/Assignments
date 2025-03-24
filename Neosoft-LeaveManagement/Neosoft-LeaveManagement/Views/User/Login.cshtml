@@ -1,38 +1,63 @@
 ﻿@model Neosoft_LeaveManagement.ViewModels.LoginViewModel
 
-@{
-    ViewData["Title"] = "Login";
-}
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <!-- Left Side - Login Form -->
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+                                <div class="text-center">
+                                    @* <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" *@
+                                    @*      style="width: 185px;" alt="logo"> *@
+                                    <h4 class="mt-1 mb-5 pb-1">Welcome to Neosoft Leave Management</h4>
+                                </div>
 
-<h1>Login</h1>
+                                <form asp-action="Login" asp-controller="User" method="post">
+                                    <p>Please login to your account</p>
 
-<h4>LoginViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+                                    <!-- Email Input -->
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Email</label>
+                                        <input asp-for="Email" class="form-control" placeholder="Email address" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                                    <!-- Password Input -->
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Password</label>
+                                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Submit Button + Forgot Password -->
+                                    <div class="text-center pt-1 mb-5 pb-1">
+                                    <button type="submit" class="btn btn-outline-danger ms-2">Log in</button>
+                                    </div>
+
+                                    <!-- Register Button -->
+                                    <div class="d-flex align-items-center justify-content-center pb-4">
+                                        <p class="mb-0 me-2">Don't have an account?</p>
+                                        <a asp-action="Register" asp-controller="User" class="btn btn-outline-danger ms-2">Create new</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Right Side - Gradient Section -->
+                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                <h4 class="mb-4">We are more than just a company</h4>
+                                <p class="small mb-0">Neosoft Leave Management is a platform designed to make leave tracking effortless for employees and managers. Apply, approve, and monitor leave requests seamlessly.</p>
+                            </div>
+                        </div>
+                    </div> <!-- End of row -->
+                </div> <!-- End of card -->
+            </div>
+        </div>
+    
+</section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

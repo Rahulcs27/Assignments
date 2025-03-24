@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Neosoft_LeaveManagement.Migrations
 {
-    public partial class leavebalance : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,8 @@ namespace Neosoft_LeaveManagement.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,8 +104,8 @@ namespace Neosoft_LeaveManagement.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Email", "Name", "Password", "Role" },
-                values: new object[] { 1, "admin@neosoftmail.com", "Admin", "admin123", 0 });
+                columns: new[] { "UserId", "Email", "Name", "Password", "ProfilePicture", "Role" },
+                values: new object[] { 1, "admin@neosoftmail.com", "Admin", "Admin@123", null, 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_LeaveApprovals_LeaveRequestId",

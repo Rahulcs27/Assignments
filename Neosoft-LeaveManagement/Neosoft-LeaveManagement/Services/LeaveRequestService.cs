@@ -10,12 +10,14 @@ namespace Neosoft_LeaveManagement.Services
     public class LeaveRequestService : ILeaveRequestService
     {
         private readonly ILeaveRequestRepository _leaveRequestRepository;
+        private readonly ILeaveBalanceRepository _leaveBalanceRepository;
         private readonly DataContext _context;
 
-        public LeaveRequestService(ILeaveRequestRepository leaveRequestRepository, DataContext context)
+        public LeaveRequestService(ILeaveRequestRepository leaveRequestRepository, DataContext context, ILeaveBalanceRepository leaveBalanceRepository)
         {
             _leaveRequestRepository = leaveRequestRepository;
             _context = context;
+            _leaveBalanceRepository = leaveBalanceRepository;
         }
 
         public async Task<IEnumerable<LeaveRequest>> GetAllLeaveRequestsAsync()
@@ -80,21 +82,27 @@ namespace Neosoft_LeaveManagement.Services
             _context.LeaveRequests.Add(leaveRequest);
             await _context.SaveChangesAsync();
         }
-        public async Task CancelLeaveRequestAsync(int id)
+        public async Task<bool> CancelLeaveRequestAsync(int id)
         {
-            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
-            if (leaveRequest == null)
+            var existingRequest = await _leaveRequestRepository.GetLeaveRequestByIdAsync(id);
+            if (existingRequest == null || existingRequest.Status != LeaveStatus.Pending)
             {
-                throw new Exception("Leave request not found.");
+                return false;
             }
 
-            if (leaveRequest.Status == LeaveStatus.Approved)
+            var leaveBalance = await _leaveBalanceRepository.GetLeaveBalanceByUserIdAsync(existingRequest.UserId);
+            if (leaveBalance == null)
             {
-                throw new Exception("Cannot cancel an approved leave request.");
+                return false;
             }
 
-            _context.LeaveRequests.Remove(leaveRequest);
-            await _context.SaveChangesAsync();
+            leaveBalance.RemainingLeaveDays += (existingRequest.EndDate - existingRequest.StartDate).Days + 1;
+
+            await _leaveRequestRepository.DeleteLeaveRequestAsync(id);
+
+            await _leaveBalanceRepository.UpdateLeaveBalanceAsync(leaveBalance);
+
+            return true;
         }
         public async Task<bool> UpdateLeaveRequestAsync(int id, LeaveRequest leaveRequest)
         {

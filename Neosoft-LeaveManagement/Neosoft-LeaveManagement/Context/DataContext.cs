@@ -17,12 +17,10 @@ public class DataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Define Primary Keys
         modelBuilder.Entity<User>().HasKey(u => u.UserId);
         modelBuilder.Entity<LeaveRequest>().HasKey(lr => lr.LeaveRequestId);
         modelBuilder.Entity<LeaveApproval>().HasKey(la => la.ApprovalId);
 
-        // User Relationships
         modelBuilder.Entity<User>()
             .HasMany(u => u.LeaveRequests)
             .WithOne(lr => lr.Employee)
@@ -35,20 +33,18 @@ public class DataContext : DbContext
             .HasForeignKey(la => la.ManagerId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Leave Request - Approval Relationship
         modelBuilder.Entity<LeaveRequest>()
             .HasOne(lr => lr.LeaveApproval)
             .WithOne(la => la.LeaveRequest)
             .HasForeignKey<LeaveApproval>(la => la.LeaveRequestId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Seed Default Admin User
         modelBuilder.Entity<User>().HasData(new User
         {
             UserId = 1,
             Name = "Admin",
             Email = "admin@neosoftmail.com",
-            Password = "admin123",
+            Password = "Admin@123",
             Role = UserRole.Admin
         });
     }

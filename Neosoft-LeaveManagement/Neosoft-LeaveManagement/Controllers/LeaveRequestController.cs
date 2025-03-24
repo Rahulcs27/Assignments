@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Neosoft_LeaveManagement.Constants;
 using Neosoft_LeaveManagement.Exceptions;
+using Neosoft_LeaveManagement.Filters;
 using Neosoft_LeaveManagement.Interfaces;
 using Neosoft_LeaveManagement.Models;
 using Neosoft_LeaveManagement.ViewModels;
 
 namespace Neosoft_LeaveManagement.Controllers
 {
+    [ServiceFilter(typeof(RequireLoginFilter))]
+    [ServiceFilter(typeof(ExceptionHandlingAttribute))]
     public class LeaveRequestController : Controller
     {
         private readonly ILeaveRequestService _leaveRequestService;
@@ -134,8 +137,8 @@ namespace Neosoft_LeaveManagement.Controllers
                 return View(model);
             }
 
-            try
-            {
+            //try
+            //{
                 var existingRequest = await _leaveRequestService.GetLeaveRequestByIdAsync(id);
                 if (existingRequest == null)
                 {
@@ -143,25 +146,42 @@ namespace Neosoft_LeaveManagement.Controllers
                     return RedirectToAction("List");
                 }
 
-                // Preserve status, only update editable fields
+                var leaveBalance = await _leaveBalanceRepository.GetLeaveBalanceByUserIdAsync(existingRequest.UserId);
+                if (leaveBalance == null)
+                {
+                    TempData["ErrorMessage"] = "Leave balance record not found!";
+                    return RedirectToAction("List");
+                }
+
+                int originalLeaveDays = (existingRequest.EndDate - existingRequest.StartDate).Days + 1;
+                int newLeaveDays = (model.EndDate - model.StartDate).Days + 1;
+
+                leaveBalance.RemainingLeaveDays += originalLeaveDays; 
+                leaveBalance.RemainingLeaveDays -= newLeaveDays; 
+
+                if (leaveBalance.RemainingLeaveDays < 0)
+                {
+                    TempData["ErrorMessage"] = "Not enough leave balance!";
+                    return View(model);
+                }
+
                 existingRequest.LeaveType = model.LeaveType;
                 existingRequest.StartDate = model.StartDate;
                 existingRequest.EndDate = model.EndDate;
                 existingRequest.Reason = model.Reason;
 
                 await _leaveRequestService.UpdateLeaveRequestAsync(id, existingRequest);
+                await _leaveBalanceRepository.UpdateLeaveBalanceAsync(leaveBalance);
 
                 TempData["SuccessMessage"] = "Leave request updated successfully!";
                 return RedirectToAction("List");
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
-                return View(model);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+            //    return View(model);
+            //}
         }
-
-
         [HttpPost]
         public async Task<IActionResult> Cancel(int id)
         {

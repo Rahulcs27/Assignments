@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Neosoft_LeaveManagement.ViewModels
 {
@@ -10,10 +11,12 @@ namespace Neosoft_LeaveManagement.ViewModels
         [Required, EmailAddress]
         public string Email { get; set; }
 
-        [Required, MinLength(6)]
+        [Required, NotNull, RegularExpression("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$")]
         public string Password { get; set; }
 
         [Required, Compare("Password")]
         public string ConfirmPassword { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
+
     }
 }

@@ -21,6 +21,10 @@ namespace Neosoft_LeaveManagement
 
             builder.Services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<RequireLoginFilter>();
+            builder.Services.AddScoped<ManagerRoleFilter>();
+            builder.Services.AddScoped<ExceptionHandlingAttribute>();
+
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
