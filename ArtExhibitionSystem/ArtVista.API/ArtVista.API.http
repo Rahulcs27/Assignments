@@ -1,0 +1,6 @@
+@ArtVista.API_HostAddress = http://localhost:5208
+
+GET {{ArtVista.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
