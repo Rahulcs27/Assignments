@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtVista.Infrastructure.Migrations
 {
     [DbContext(typeof(ArtVistaDbContext))]
-    [Migration("20250328064913_initial")]
+    [Migration("20250328073111_initial")]
     partial class initial
     {
         /// <inheritdoc />

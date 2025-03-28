@@ -9,9 +9,6 @@ namespace ArtVista.Identity.Model
         public string LastName { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; }
 
-        //public string? phoneNo { get; set; } = string.Empty;
-        //public Artist artist { get; set; }
-
         //public string? ArtistID { get; set; }
 
     }

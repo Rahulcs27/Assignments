@@ -102,7 +102,7 @@ namespace ArtVista.Identity.Migrations
                         {
                             Id = "41776062-6086-1fbf-b923-2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3cfc7cea-63a0-482e-9a76-2d4143486006",
+                            ConcurrencyStamp = "1797a14f-732f-4f02-ba2b-a3630345b91f",
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@artvista.com",
                             EmailConfirmed = true,
@@ -111,9 +111,9 @@ namespace ArtVista.Identity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ARTVISTA.COM",
                             NormalizedUserName = "ADMIN@ARTVISTA.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFGWhvBIOM62XQ7vpCX8rreVZnmHhIqVGSmjejT5bwnNOEEPtGs5JbKFh+iHfjhRSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMw1nwIBWfDLyWUKruAWAPSBbfQOU5bhlCvYwHnEuAVnpvH7eov/FXuEBhGfje40ew==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ce0966c5-dab9-44aa-83c9-80b7fa4166cc",
+                            SecurityStamp = "b1f27c20-7f68-4e4b-b323-ffe50e99b314",
                             TwoFactorEnabled = false,
                             UserName = "admin@artvista.com"
                         },
@@ -121,7 +121,7 @@ namespace ArtVista.Identity.Migrations
                         {
                             Id = "41776062-6086-1fcf-b923-2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1cd22297-6e36-450a-a345-b42aeacf56a1",
+                            ConcurrencyStamp = "9288ca79-55cd-4c40-9b80-b5967514ddb2",
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "rahul@artvista.com",
                             EmailConfirmed = true,
@@ -130,9 +130,9 @@ namespace ArtVista.Identity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "RAHUL@ARTVISTA.COM",
                             NormalizedUserName = "RAHUL@ARTVISTA.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEL4tpp1DhL/zCc1ldN49/X2UzEJxePNn5oBz3r6Ftj/PBICh6IGYKKg3kiKmLzOwAg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENi1zJHvHn3ppTOyxaG2sUIT8QosJn1MmGyM9M8sWFr6J/2FlhCpJOg+V3iVpgT4ww==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2271e213-9c8d-42d6-bfe5-8a2aace19d36",
+                            SecurityStamp = "3839ef91-b80d-4d00-9677-806c4e593296",
                             TwoFactorEnabled = false,
                             UserName = "Rahul@artvista.com"
                         },
@@ -140,7 +140,7 @@ namespace ArtVista.Identity.Migrations
                         {
                             Id = "41776062-6086-1fdf-b923-2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84d1dae6-fa72-4903-9d1f-9e988718def5",
+                            ConcurrencyStamp = "42993a9b-2ab4-48f4-9474-26fb5716dbd6",
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "om@artvista.com",
                             EmailConfirmed = true,
@@ -149,9 +149,9 @@ namespace ArtVista.Identity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OM@ARTVISTA.COM",
                             NormalizedUserName = "OM@ARTVISTA.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELp9TnI1yu1lA+MQFsW6pkDT8cTEpc8coOvyDraTF9PVrZmyH05laamIqBDDBSo2mQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMUrYPZ1gxA2wBxLqtiyRuUFF43OsMnH1pljsFWEyXqGc4L2BwfFkS4Zpyt2w+mnPg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6f676a50-1638-415b-8a81-19b8ebaddf5d",
+                            SecurityStamp = "8c212075-8942-4f7d-a5f5-0ab74e70ccef",
                             TwoFactorEnabled = false,
                             UserName = "om@artvista.com"
                         });

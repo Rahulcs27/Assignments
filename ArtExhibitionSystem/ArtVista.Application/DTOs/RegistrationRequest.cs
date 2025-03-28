@@ -1,4 +1,6 @@
-﻿namespace ArtVista.Application.DTOs
+﻿using ArtVista.Domain.Entities;
+
+namespace ArtVista.Application.DTOs
 {
     public class RegistrationRequest
     {
