@@ -1,7 +1,7 @@
-﻿using ArtVista.Application.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using ArtVista.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-
+using ArtVista.Application.DTOs;
 
 namespace ArtVista.API.Controllers
 {
@@ -16,18 +16,28 @@ namespace ArtVista.API.Controllers
             _authService = authService;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
-        {
-            var response = await _authService.Register(request);
-            return Ok(response);
-        }
-
+        /// <summary>
+        /// Handles user login and returns a JWT token.
+        /// </summary>
+        /// <param name="request">User login credentials.</param>
+        /// <returns>Authentication response with token.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthRequest request)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var response = await _authService.Login(request);
             return Ok(response);
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]RegistrationRequest registrationRequest, [FromQuery]ArtistDTO ato)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.Register(registrationRequest, ato);
+            return Ok(new { message = result });
         }
     }
 }

@@ -6,6 +6,6 @@ namespace ArtVista.Application.Interfaces
     public interface IAuthService
     {
         Task<AuthResponse> Login(AuthRequest request);
-        Task<string> Register(RegistrationRequest request);
+        Task<string> Register(RegistrationRequest request, ArtistDTO ato);
     }
 }

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ArtVista.Application\ArtVista.Application.csproj" />
+    <ProjectReference Include="..\ArtVista.Domain\ArtVista.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -167,7 +167,8 @@ namespace ArtVista.Identity.Migrations
                 values: new object[,]
                 {
                     { "1", null, "User", "USER" },
-                    { "2", null, "Administrator", "ADMINISTRATOR" }
+                    { "2", null, "Administrator", "ADMINISTRATOR" },
+                    { "3", null, "Artist", "ARTIST" }
                 });
 
             migrationBuilder.InsertData(
@@ -175,8 +176,9 @@ namespace ArtVista.Identity.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "41776062-6086-1fbf-b923-2879a6680b9a", 0, "5804f1d3-c769-4ce4-98a9-b2c7a9ebed57", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@artvista.com", true, "Admin", "User", false, null, "ADMIN@ARTVISTA.COM", "ADMIN@ARTVISTA.COM", "AQAAAAIAAYagAAAAEOToQhK6ax+NAmDV1WZXIE6IznedFVnzSPKF3w+/oe2Jopf+BNjNfoKLuTnVqvNTnA==", null, false, "7953ff33-3637-4223-94de-3e7abd00facb", false, "admin@artvista.com" },
-                    { "41776062-6086-1fcf-b923-2879a6680b9a", 0, "0699233a-f8dc-498a-a85d-f6348a679895", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "rahul@artvista.com", true, "Rahul", "Suthar", false, null, "RAHUL@ARTVISTA.COM", "RAHUL@ARTVISTA.COM", "AQAAAAIAAYagAAAAEJ6se0jADHRvwt73dmDhThjLbbyiPfnRiE5JHgXdmGRCrb2PmqY9lL4igMkhFv2Dzg==", null, false, "90aa276d-e132-4fc2-9f1b-e2bc9ef7b61d", false, "Rahul@artvista.com" }
+                    { "41776062-6086-1fbf-b923-2879a6680b9a", 0, "3cfc7cea-63a0-482e-9a76-2d4143486006", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@artvista.com", true, "Admin", "User", false, null, "ADMIN@ARTVISTA.COM", "ADMIN@ARTVISTA.COM", "AQAAAAIAAYagAAAAEFGWhvBIOM62XQ7vpCX8rreVZnmHhIqVGSmjejT5bwnNOEEPtGs5JbKFh+iHfjhRSg==", null, false, "ce0966c5-dab9-44aa-83c9-80b7fa4166cc", false, "admin@artvista.com" },
+                    { "41776062-6086-1fcf-b923-2879a6680b9a", 0, "1cd22297-6e36-450a-a345-b42aeacf56a1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "rahul@artvista.com", true, "Rahul", "Suthar", false, null, "RAHUL@ARTVISTA.COM", "RAHUL@ARTVISTA.COM", "AQAAAAIAAYagAAAAEL4tpp1DhL/zCc1ldN49/X2UzEJxePNn5oBz3r6Ftj/PBICh6IGYKKg3kiKmLzOwAg==", null, false, "2271e213-9c8d-42d6-bfe5-8a2aace19d36", false, "Rahul@artvista.com" },
+                    { "41776062-6086-1fdf-b923-2879a6680b9a", 0, "84d1dae6-fa72-4903-9d1f-9e988718def5", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "om@artvista.com", true, "Om", "Auti", false, null, "OM@ARTVISTA.COM", "OM@ARTVISTA.COM", "AQAAAAIAAYagAAAAELp9TnI1yu1lA+MQFsW6pkDT8cTEpc8coOvyDraTF9PVrZmyH05laamIqBDDBSo2mQ==", null, false, "6f676a50-1638-415b-8a81-19b8ebaddf5d", false, "om@artvista.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -184,8 +186,9 @@ namespace ArtVista.Identity.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "1", "41776062-6086-1fbf-b923-2879a6680b9a" },
-                    { "2", "41776062-6086-1fcf-b923-2879a6680b9a" }
+                    { "2", "41776062-6086-1fbf-b923-2879a6680b9a" },
+                    { "1", "41776062-6086-1fcf-b923-2879a6680b9a" },
+                    { "3", "41776062-6086-1fdf-b923-2879a6680b9a" }
                 });
 
             migrationBuilder.CreateIndex(

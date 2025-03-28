@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,28 +8,35 @@ using System.Threading.Tasks;
 using ArtVista.Application.DTOs;
 using ArtVista.Identity.Model;
 using ArtVista.Application.Interfaces;
-
+using ArtVista.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using ArtVista.Identity.Context;
 namespace ArtVista.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly IArtistService _artistService; 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ArtIdentityDbContext _identityDbContext;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthService(
+        public AuthService(IArtistService artistService1,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IOptions<JwtSettings> jwtSettings)
+             ArtIdentityDbContext identityDbContext,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<JwtSettings> jwtSettings)  
         {
+            _artistService = artistService1;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            _identityDbContext = identityDbContext;
             _jwtSettings = jwtSettings.Value;
         }
 
-        /// <summary>
-        /// Handles user login and generates JWT token
-        /// </summary>
         public async Task<AuthResponse> Login(AuthRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -39,7 +45,7 @@ namespace ArtVista.Infrastructure.Services
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
 
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);
 
             return new AuthResponse
@@ -49,45 +55,93 @@ namespace ArtVista.Infrastructure.Services
                 Role = roles.FirstOrDefault() ?? "User"
             };
         }
-
-        /// <summary>
-        /// Registers a new user and assigns a default role
-        /// </summary>
-        public async Task<string> Register(RegistrationRequest request)
+        public async Task<string> Register(RegistrationRequest request, ArtistDTO ato)
         {
-            var user = new ApplicationUser
+            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
+            try
             {
-                UserName = request.Email,
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                DateOfBirth = request.DateOfBirth
-            };
+                var user = new ApplicationUser
+                {
+                    UserName = request.Email,
+                    Email = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    DateOfBirth = request.DateOfBirth
+                };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (!result.Succeeded)
-            {
-                throw new Exception("User registration failed");
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (!result.Succeeded)
+                {
+                    throw new Exception("User registration failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+
+                // 🔴 Important: Fetch user from the database to ensure it exists
+                user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    throw new Exception("User retrieval failed after creation.");
+                }
+
+                // Ensure role exists before assigning
+                var role = string.IsNullOrEmpty(request.Role) ? "User" : request.Role;
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(role));
+                }
+
+                // 🔴 Important: Assign role after confirming user exists
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
+                if (!roleResult.Succeeded)
+                {
+                    throw new Exception("Role assignment failed: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                }
+
+                // Create artist only if role is "Artist" and artistDto is not null
+                if (role == "Artist")
+                {
+                    RegisterAsArtist(user, ato);
+                }
+
+                await transaction.CommitAsync();
+                return $"User registered successfully with role: {role}";
             }
-
-            await _userManager.AddToRoleAsync(user, "User");
-            return "User registered successfully";
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception($"Registration failed: {ex.Message}");
+            }
         }
 
-        /// <summary>
-        /// Generates a JWT Token for authenticated users
-        /// </summary>
-        private string GenerateJwtToken(ApplicationUser user)
+        public async Task RegisterAsArtist(ApplicationUser user, ArtistDTO ato)
+        {
+            var artist = new Artist
+            {
+                ArtistID = user.Id, // 🔴 Ensuring the ArtistID matches ApplicationUser.Id
+                Name = user.FirstName,
+                BirthDate = user.DateOfBirth,
+                Phone = ato.Phone
+            };
+
+            // 🔴 Use ArtVistaDbContext to save artist
+            await _artistService.AddArtistAsync(artist);
+        }
+
+        private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var roles = await _userManager.GetRolesAsync(user);
+            var roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
+
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("userId", user.Id)
             };
+
+            claims.AddRange(roleClaims);
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,

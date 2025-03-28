@@ -11,11 +11,18 @@ namespace ArtVista.Infrastructure.Context
     public class ArtVistaDbContext : DbContext
     {
         public ArtVistaDbContext(DbContextOptions<ArtVistaDbContext> options) : base(options) { }
+        public DbSet<Artist> Artists { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<Artist>()
+            //    .HasOne<ApplicationUser>()  // No navigation property in ApplicationUser
+            //    .WithOne()
+            //    .HasForeignKey<Artist>(a => a.ArtistID)
+            //    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
         }
-        public DbSet<Artist> Artists { get; set; }
     }
 }

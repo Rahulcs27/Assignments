@@ -20,6 +20,12 @@ namespace ArtVista.Identity.Configuration
                     Id = "2",
                     Name = "Administrator",
                     NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Id = "3",
+                    Name = "Artist",
+                    NormalizedName = "ARTIST"
                 }
             );
         }

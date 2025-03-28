@@ -35,6 +35,18 @@ namespace ArtVista.Identity.Configuration
                     NormalizedUserName = "RAHUL@ARTVISTA.COM",
                     EmailConfirmed = true,
                     PasswordHash = hasher.HashPassword(null, "Rahul@123")
+                },
+                new ApplicationUser
+                {
+                    Id = "41776062-6086-1fdf-b923-2879a6680b9a",
+                    Email = "om@artvista.com",
+                    NormalizedEmail = "OM@ARTVISTA.COM",
+                    FirstName = "Om",
+                    LastName = "Auti",
+                    UserName = "om@artvista.com",
+                    NormalizedUserName = "OM@ARTVISTA.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "OmAuti@123")
                 }
             );
         }

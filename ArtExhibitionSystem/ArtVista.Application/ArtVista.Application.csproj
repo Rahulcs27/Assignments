@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <Reference Include="ArtVista.Domain">
+      <HintPath>..\ArtVista.Domain\bin\Debug\net8.0\ArtVista.Domain.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
