@@ -75,28 +75,24 @@ namespace ArtVista.Infrastructure.Services
                     throw new Exception("User registration failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
 
-                // 🔴 Important: Fetch user from the database to ensure it exists
                 user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
                     throw new Exception("User retrieval failed after creation.");
                 }
 
-                // Ensure role exists before assigning
                 var role = string.IsNullOrEmpty(request.Role) ? "User" : request.Role;
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
                     await _roleManager.CreateAsync(new IdentityRole(role));
                 }
 
-                // 🔴 Important: Assign role after confirming user exists
                 var roleResult = await _userManager.AddToRoleAsync(user, role);
                 if (!roleResult.Succeeded)
                 {
                     throw new Exception("Role assignment failed: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
                 }
 
-                // Create artist only if role is "Artist" and artistDto is not null
                 if (role == "Artist")
                 {
                     RegisterAsArtist(user, ato);
@@ -116,13 +112,12 @@ namespace ArtVista.Infrastructure.Services
         {
             var artist = new Artist
             {
-                ArtistID = user.Id, // 🔴 Ensuring the ArtistID matches ApplicationUser.Id
+                ArtistID = user.Id, 
                 Name = user.FirstName,
                 BirthDate = user.DateOfBirth,
                 Phone = ato.Phone
             };
 
-            // 🔴 Use ArtVistaDbContext to save artist
             await _artistService.AddArtistAsync(artist);
         }
 

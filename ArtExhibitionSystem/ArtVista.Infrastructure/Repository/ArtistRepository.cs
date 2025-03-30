@@ -26,6 +26,7 @@ namespace ArtVista.Infrastructure.Repository
 
         public async Task AddArtistAsync(Artist artist)
         {
+
             await _context.Artists.AddAsync(artist);
             await _context.SaveChangesAsync();
         }

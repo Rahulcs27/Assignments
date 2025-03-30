@@ -11,6 +11,7 @@ using ArtVista.Application.Interfaces;
 using ArtVista.Infrastructure.Repository;
 using ArtVista.Application.Services;
 using ArtVista.Infrastructure.Services;
+using ArtVista.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<ArtIdentityDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<ArtVistaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ArtIdentityDbContext>()
@@ -31,6 +32,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
+builder.Services.AddScoped<IArtworkService, ArtworkService>();
 
 
 var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
