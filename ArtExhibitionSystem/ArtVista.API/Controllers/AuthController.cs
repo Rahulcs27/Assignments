@@ -16,11 +16,6 @@ namespace ArtVista.API.Controllers
             _authService = authService;
         }
 
-        /// <summary>
-        /// Handles user login and returns a JWT token.
-        /// </summary>
-        /// <param name="request">User login credentials.</param>
-        /// <returns>Authentication response with token.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthRequest request)
         {

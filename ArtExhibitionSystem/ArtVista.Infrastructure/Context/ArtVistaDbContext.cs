@@ -6,6 +6,7 @@ using ArtVista.Identity.Model;
 using ArtVista.Identity.Configuration;
 using ArtVista.Domain.Entities;
 
+
 namespace ArtVista.Infrastructure.Context
 {
     public class ArtVistaDbContext : DbContext
@@ -22,34 +23,36 @@ namespace ArtVista.Infrastructure.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<FavoriteArtwork>()
-                .HasKey(fa => new { fa.UserId, fa.ArtworkID });
+               .HasKey(fa => new { fa.UserId, fa.ArtworkID });
 
+            modelBuilder.Entity<FavoriteArtwork>()
+                .HasOne(fa => fa.Artwork)
+                .WithMany()
+                .HasForeignKey(fa => fa.ArtworkID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Define composite primary key for ArtworkGallery
             modelBuilder.Entity<ArtworkGallery>()
                 .HasKey(ag => new { ag.ArtworkID, ag.GalleryID });
 
-            modelBuilder.Entity<Artwork>()
-                .HasOne(a => a.Artist)
-                .WithMany(artist => artist.Artworks)
-                .HasForeignKey(a => a.ArtistID)
-                .OnDelete(DeleteBehavior.Cascade); 
-
-            modelBuilder.Entity<Gallery>()
-                .HasOne(g => g.Artist)
-                .WithMany(a => a.Galleries)
-                .HasForeignKey(g => g.ArtistID)
-                .OnDelete(DeleteBehavior.Cascade);  
-
+            // Define foreign key relationships
             modelBuilder.Entity<ArtworkGallery>()
                 .HasOne(ag => ag.Artwork)
                 .WithMany(a => a.ArtworkGalleries)
-                .HasForeignKey(ag => ag.ArtworkID)
-                .OnDelete(DeleteBehavior.NoAction);  
+                .HasForeignKey(ag => ag.ArtworkID);
 
             modelBuilder.Entity<ArtworkGallery>()
                 .HasOne(ag => ag.Gallery)
                 .WithMany(g => g.ArtworkGalleries)
-                .HasForeignKey(ag => ag.GalleryID)
-                .OnDelete(DeleteBehavior.NoAction);  
+                .HasForeignKey(ag => ag.GalleryID);
+
+            // ✅ Fix: Prevent multiple cascade paths for Artist -> Gallery
+            modelBuilder.Entity<Gallery>()
+                .HasOne(g => g.Artist)
+                .WithMany(a => a.Galleries)
+                .HasForeignKey(g => g.ArtistId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+
         }
 
     }

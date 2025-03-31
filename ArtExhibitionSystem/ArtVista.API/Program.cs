@@ -34,6 +34,13 @@ builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
 builder.Services.AddScoped<IArtworkService, ArtworkService>();
+builder.Services.AddScoped<IFavoriteArtworkRepository, FavoriteArtworkRepository>();
+builder.Services.AddScoped<IFavoriteArtworkService, FavoriteArtworkService>();
+builder.Services.AddScoped<IArtworkGalleryRepository, ArtworkGalleryRepository>();
+builder.Services.AddScoped<IArtworkGalleryService, ArtworkGalleryService>();
+builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
+builder.Services.AddScoped<IGalleryService, GalleryService>();
+
 
 
 var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");

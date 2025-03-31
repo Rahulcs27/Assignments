@@ -13,6 +13,7 @@ namespace ArtVista.Domain.Entities
     public class Artwork
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ArtworkID { get; set; }
 
         [Required]

@@ -5,18 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 namespace ArtVista.Domain.Entities
 {
     public class FavoriteArtwork
     {
-        [Key]
-        public int Id { get; set; } 
-
-        [Required]
         public string UserId { get; set; }
 
-        [Required]
         public int ArtworkID { get; set; }
 
         [ForeignKey("ArtworkID")]

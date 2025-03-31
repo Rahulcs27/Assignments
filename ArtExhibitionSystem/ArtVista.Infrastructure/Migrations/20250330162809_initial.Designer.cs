@@ -4,6 +4,7 @@ using ArtVista.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtVista.Infrastructure.Migrations
 {
     [DbContext(typeof(ArtVistaDbContext))]
-    partial class ArtVistaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250330162809_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,6 +87,9 @@ namespace ArtVista.Infrastructure.Migrations
                     b.Property<int>("GalleryID")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.HasKey("ArtworkID", "GalleryID");
 
                     b.HasIndex("GalleryID");
@@ -119,16 +125,14 @@ namespace ArtVista.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GalleryID"));
 
-                    b.Property<string>("ArtistId")
+                    b.Property<string>("ArtistID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -137,7 +141,7 @@ namespace ArtVista.Infrastructure.Migrations
 
                     b.HasKey("GalleryID");
 
-                    b.HasIndex("ArtistId");
+                    b.HasIndex("ArtistID");
 
                     b.ToTable("Galleries");
                 });
@@ -158,13 +162,13 @@ namespace ArtVista.Infrastructure.Migrations
                     b.HasOne("ArtVista.Domain.Entities.Artwork", "Artwork")
                         .WithMany("ArtworkGalleries")
                         .HasForeignKey("ArtworkID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ArtVista.Domain.Entities.Gallery", "Gallery")
                         .WithMany("ArtworkGalleries")
                         .HasForeignKey("GalleryID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Artwork");
@@ -191,8 +195,8 @@ namespace ArtVista.Infrastructure.Migrations
                 {
                     b.HasOne("ArtVista.Domain.Entities.Artist", "Artist")
                         .WithMany("Galleries")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("ArtistID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Artist");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtVista.Infrastructure.Migrations
 {
     [DbContext(typeof(ArtVistaDbContext))]
-    [Migration("20250328100339_sec")]
-    partial class sec
+    [Migration("20250330191158_gallery")]
+    partial class gallery
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,9 +87,6 @@ namespace ArtVista.Infrastructure.Migrations
                     b.Property<int>("GalleryID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("ArtworkID", "GalleryID");
 
                     b.HasIndex("GalleryID");
@@ -105,12 +102,14 @@ namespace ArtVista.Infrastructure.Migrations
                     b.Property<int>("ArtworkID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int?>("ArtworkID1")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "ArtworkID");
 
                     b.HasIndex("ArtworkID");
+
+                    b.HasIndex("ArtworkID1");
 
                     b.ToTable("FavoriteArtworks");
                 });
@@ -123,14 +122,16 @@ namespace ArtVista.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GalleryID"));
 
-                    b.Property<string>("ArtistID")
+                    b.Property<string>("ArtistId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -139,7 +140,7 @@ namespace ArtVista.Infrastructure.Migrations
 
                     b.HasKey("GalleryID");
 
-                    b.HasIndex("ArtistID");
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("Galleries");
                 });
@@ -160,13 +161,13 @@ namespace ArtVista.Infrastructure.Migrations
                     b.HasOne("ArtVista.Domain.Entities.Artwork", "Artwork")
                         .WithMany("ArtworkGalleries")
                         .HasForeignKey("ArtworkID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ArtVista.Domain.Entities.Gallery", "Gallery")
                         .WithMany("ArtworkGalleries")
                         .HasForeignKey("GalleryID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Artwork");
@@ -177,10 +178,14 @@ namespace ArtVista.Infrastructure.Migrations
             modelBuilder.Entity("ArtVista.Domain.Entities.FavoriteArtwork", b =>
                 {
                     b.HasOne("ArtVista.Domain.Entities.Artwork", "Artwork")
-                        .WithMany("FavoriteArtworks")
+                        .WithMany()
                         .HasForeignKey("ArtworkID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ArtVista.Domain.Entities.Artwork", null)
+                        .WithMany("FavoriteArtworks")
+                        .HasForeignKey("ArtworkID1");
 
                     b.Navigation("Artwork");
                 });
@@ -189,8 +194,8 @@ namespace ArtVista.Infrastructure.Migrations
                 {
                     b.HasOne("ArtVista.Domain.Entities.Artist", "Artist")
                         .WithMany("Galleries")
-                        .HasForeignKey("ArtistID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Artist");

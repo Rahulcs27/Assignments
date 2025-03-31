@@ -6,11 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ArtVista.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class sec : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Artists",
+                columns: table => new
+                {
+                    ArtistID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Artists", x => x.ArtistID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Artworks",
                 columns: table => new
@@ -62,7 +76,7 @@ namespace ArtVista.Infrastructure.Migrations
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ArtworkID = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ArtworkID1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,6 +87,11 @@ namespace ArtVista.Infrastructure.Migrations
                         principalTable: "Artworks",
                         principalColumn: "ArtworkID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FavoriteArtworks_Artworks_ArtworkID1",
+                        column: x => x.ArtworkID1,
+                        principalTable: "Artworks",
+                        principalColumn: "ArtworkID");
                 });
 
             migrationBuilder.CreateTable(
@@ -114,6 +133,11 @@ namespace ArtVista.Infrastructure.Migrations
                 column: "ArtworkID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FavoriteArtworks_ArtworkID1",
+                table: "FavoriteArtworks",
+                column: "ArtworkID1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Galleries_ArtistID",
                 table: "Galleries",
                 column: "ArtistID");
@@ -133,6 +157,9 @@ namespace ArtVista.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Artworks");
+
+            migrationBuilder.DropTable(
+                name: "Artists");
         }
     }
 }

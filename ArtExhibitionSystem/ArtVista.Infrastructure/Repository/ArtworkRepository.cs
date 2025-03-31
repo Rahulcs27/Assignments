@@ -35,7 +35,9 @@ namespace ArtVista.Infrastructure.Repository
                 throw new Exception("Artist not found.");
             }
 
-            artwork.Artist = existingArtist;
+            // Ensure that the ArtworkID is not explicitly set if it's an identity column
+            artwork.ArtworkID = 0; 
+
             await _context.Artworks.AddAsync(artwork);
             await _context.SaveChangesAsync();
         }
