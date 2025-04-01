@@ -1,0 +1,57 @@
+<h2 class="text-center mt-5">Login</h2>
+<form (ngSubmit)="login()" class="container mt-4" #loginForm="ngForm">
+  <!-- Email Input -->
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input
+      type="email"
+      [(ngModel)]="email"
+      name="email"
+      id="email"
+      class="form-control"
+      placeholder="Enter your email"
+      required
+      #emailField="ngModel"
+    />
+    <div *ngIf="emailField.invalid && emailField.touched" class="text-danger">
+      Please enter a valid email address.
+    </div>
+  </div>
+
+  <!-- Password Input -->
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input
+      type="password"
+      [(ngModel)]="password"
+      name="password"
+      id="password"
+      class="form-control"
+      placeholder="Enter your password"
+      required
+      #passwordField="ngModel"
+    />
+    <div *ngIf="passwordField.invalid && passwordField.touched" class="text-danger">
+      Password is required.
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="text-center pt-1 mb-5 pb-1">
+    <button
+      type="submit"
+      class="btn btn-outline-danger ms-2"
+      [disabled]="loginForm.invalid"
+    >
+      Log in
+    </button>
+  </div>
+
+  <!-- Register Button -->
+  <div class="d-flex align-items-center justify-content-center pb-4">
+    <p class="mb-0 me-2">Don't have an account?</p>
+    <a routerLink="/register" class="btn btn-outline-danger ms-2">Create new</a>
+  </div>
+</form>
+
+

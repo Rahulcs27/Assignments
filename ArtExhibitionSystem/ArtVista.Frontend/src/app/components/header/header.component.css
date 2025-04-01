@@ -1,0 +1,66 @@
+/* Overall navbar styling */
+.navbar {
+    transition: all 0.3s ease;
+    background-color: #343a40; /* Dark background */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Center logo for desktop */
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #f0a500; /* Golden color for logo */
+    text-transform: uppercase;
+    text-align: center;
+  }
+  
+  /* Navbar items styling */
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align nav items to the right */
+  }
+  
+  /* Nav links */
+  .nav-link {
+    color: #fff;
+    font-size: 1rem;
+    padding: 12px 20px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Hover effect for links */
+  .nav-link:hover {
+    background-color: #f0a500; /* Golden background on hover */
+    color: #343a40; /* Dark color for text */
+    transform: scale(1.05);
+  }
+  
+  /* Mobile hamburger icon */
+  .navbar-toggler {
+    background-color: #f0a500; /* Golden color */
+    border: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #fff;
+  }
+  
+  /* Media Queries for mobile responsiveness */
+  @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column; /* Stack navbar items vertically on mobile */
+      text-align: center;
+    }
+  
+    .nav-item {
+      margin-bottom: 15px; /* Add space between items */
+    }
+  
+    .navbar-collapse {
+      padding-top: 10px;
+    }
+  }
+  

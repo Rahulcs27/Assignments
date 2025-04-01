@@ -1,0 +1,92 @@
+<div class="row d-flex justify-content-center align-items-center vh-100">
+    <div class="col-xl-10">
+      <div class="card rounded-3 text-black shadow-lg p-4">
+        <div class="row g-0">
+          
+          <!-- Left Side - Registration Form -->
+          <div class="col-lg-6 d-flex align-items-center">
+            <div class="card-body p-5 w-100">
+              <div class="text-center">
+                <h4 class="mt-1 mb-5 pb-1">Create Your Account</h4>
+              </div>
+  
+              <form (ngSubmit)="register()" #registerForm="ngForm">
+                <p>Please fill in your details</p>
+  
+                <!-- First Name Input -->
+                <div class="form-outline mb-3">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input type="text" [(ngModel)]="firstName" name="firstName" id="firstName" class="form-control" placeholder="First Name" required #firstNameField="ngModel" />
+                  <div *ngIf="firstNameField.invalid && firstNameField.touched" class="text-danger">First Name is required</div>
+                </div>
+  
+                <!-- Last Name Input -->
+                <div class="form-outline mb-3">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input type="text" [(ngModel)]="lastName" name="lastName" id="lastName" class="form-control" placeholder="Last Name" required #lastNameField="ngModel" />
+                  <div *ngIf="lastNameField.invalid && lastNameField.touched" class="text-danger">Last Name is required</div>
+                </div>
+  
+                <!-- Email Input -->
+                <div class="form-outline mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" [(ngModel)]="email" name="email" id="email" class="form-control" placeholder="Email" required #emailField="ngModel" />
+                  <div *ngIf="emailField.invalid && emailField.touched" class="text-danger">Valid email is required</div>
+                </div>
+  
+                <!-- Password Input -->
+                <div class="form-outline mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" [(ngModel)]="password" name="password" id="password" class="form-control" placeholder="Password" required #passwordField="ngModel" />
+                  <div *ngIf="passwordField.invalid && passwordField.touched" class="text-danger">Password is required</div>
+                </div>
+  
+                <!-- Date of Birth Input -->
+                <div class="form-outline mb-3">
+                  <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                  <input type="date" [(ngModel)]="dateOfBirth" name="dateOfBirth" id="dateOfBirth" class="form-control" required #dobField="ngModel" />
+                  <div *ngIf="dobField.invalid && dobField.touched" class="text-danger">Date of Birth is required</div>
+                </div>
+  
+                <!-- Role Selection -->
+                <div class="form-outline mb-3">
+                  <label for="role" class="form-label">Role</label>
+                  <select [(ngModel)]="role" name="role" id="role" class="form-select" required #roleField="ngModel">
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="User">User</option>
+                    <option value="Artist">Artist</option>
+                  </select>
+                  <div *ngIf="roleField.invalid && roleField.touched" class="text-danger">Please select a role</div>
+                </div>
+  
+                <!-- Submit Button -->
+                <div class="text-center pt-1 mb-4">
+                  <button type="submit" class="btn btn-outline-danger w-100" [disabled]="registerForm.invalid">
+                    Register
+                  </button>
+                </div>
+  
+                <!-- Login Link -->
+                <div class="d-flex align-items-center justify-content-center">
+                  <p class="mb-0 me-2">Already have an account?</p>
+                  <a routerLink="/login" class="btn btn-outline-danger ms-2">Login</a>
+                </div>
+              </form>
+            </div>
+          </div>
+  
+          <!-- Right Side - Gradient Section -->
+          <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+            <div class="text-white px-4 py-5 p-md-5 mx-md-4 w-100">
+              <h4 class="mb-4">We are more than just a platform</h4>
+              <p class="small mb-0">
+                Join Neosoft Leave Management and experience seamless leave tracking. Our platform ensures effortless management for employees and managers.
+              </p>
+            </div>
+          </div>
+          
+        </div> <!-- End of row -->
+      </div> <!-- End of card -->
+    </div>
+  </div>
+  

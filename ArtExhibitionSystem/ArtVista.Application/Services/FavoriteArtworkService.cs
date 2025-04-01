@@ -26,20 +26,18 @@ namespace ArtVista.Application.Services
 
         public async Task<bool> ToggleFavoriteAsync(string userId, int artworkId)
         {
-            // Check if the artwork exists before adding it to favorites
             var existingArtwork = await _artworkRepository.GetArtworkByIdAsync(artworkId);
             if (existingArtwork == null)
             {
                 throw new Exception("Artwork not found.");
             }
 
-            // Check if the artwork is already favorited
             var isFavorite = await _favoriteArtworkRepository.IsFavoriteAsync(userId, artworkId);
 
             if (isFavorite)
             {
                 await _favoriteArtworkRepository.RemoveFavoriteAsync(userId, artworkId);
-                return false; // Artwork removed from favorites
+                return false; 
             }
             else
             {
@@ -47,11 +45,11 @@ namespace ArtVista.Application.Services
                 {
                     UserId = userId,
                     ArtworkID = artworkId,
-                    Artwork = existingArtwork // Explicitly attach Artwork
+                    Artwork = existingArtwork 
                 };
 
                 await _favoriteArtworkRepository.AddFavoriteAsync(favoriteArtwork);
-                return true; // Artwork added to favorites
+                return true; 
             }
         }
 

@@ -16,7 +16,6 @@ namespace ArtVista.API.Controllers
             _artworkGalleryService = artworkGalleryService;
         }
 
-        // ✅ Add artwork to a gallery
         [HttpPost("add")]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> AddArtworkToGallery(int artworkId, int galleryId)
@@ -33,7 +32,6 @@ namespace ArtVista.API.Controllers
             }
         }
 
-        // ✅ Remove artwork from a gallery
         [HttpDelete("remove")]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> RemoveArtworkFromGallery(int artworkId, int galleryId)
@@ -50,7 +48,6 @@ namespace ArtVista.API.Controllers
             }
         }
 
-        // ✅ Get all artworks in a gallery
         [HttpGet("gallery/{galleryId}")]
         public async Task<IActionResult> GetArtworksInGallery(int galleryId)
         {

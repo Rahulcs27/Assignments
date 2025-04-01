@@ -75,10 +75,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// ✅ Add Controllers
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+
 
 var app = builder.Build();
 
@@ -96,6 +97,12 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+app.UseCors(x => x
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 app.UseAuthorization();

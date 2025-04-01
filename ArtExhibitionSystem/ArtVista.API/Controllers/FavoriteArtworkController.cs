@@ -24,7 +24,7 @@ namespace ArtVista.API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserFavorites(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId); // ✅ Validate user here
+            var user = await _userManager.FindByIdAsync(userId); 
             if (user == null) return NotFound("User not found");
 
             var favorites = await _favoriteArtworkService.GetUserFavoritesAsync(userId);
@@ -33,16 +33,15 @@ namespace ArtVista.API.Controllers
         [HttpPost("ToggleFavorite")]
         public async Task<IActionResult> ToggleFavorite(int artworkId)
         {
-            var userEmail = User.Identity.Name; // This is returning the email
+            var userEmail = User.Identity.Name;
             if (string.IsNullOrEmpty(userEmail))
                 return Unauthorized();
 
-            // Fetch the actual user ID (GUID) from IdentityDbContext
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
                 return Unauthorized();
 
-            string userId = user.Id; // Now we get the actual GUID
+            string userId = user.Id; 
 
             var result = await _favoriteArtworkService.ToggleFavoriteAsync(userId, artworkId);
             return Ok(new { success = result });

@@ -1,0 +1,43 @@
+/* Full height for the page */
+.vh-100 {
+    height: 100vh;
+  }
+  
+  /* Custom gradient background for the right side */
+  .gradient-custom-2 {
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Gradient colors */
+    color: white;
+  }
+  
+  /* Card shadow for better elevation */
+  .card {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Basic styling for the card */
+  .card-body {
+    padding: 20px;
+  }
+  
+  /* Logo and Title Centering */
+  .text-center {
+    text-align: center;
+  }
+  
+  /* Adjust the button size and width */
+  button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+  }
+  
+  /* Styling for the 'Create new' link button */
+  a {
+    text-decoration: none;
+  }
+  
+  a.btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+  }
+  

@@ -31,11 +31,9 @@ namespace ArtVista.Infrastructure.Context
                 .HasForeignKey(fa => fa.ArtworkID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Define composite primary key for ArtworkGallery
             modelBuilder.Entity<ArtworkGallery>()
                 .HasKey(ag => new { ag.ArtworkID, ag.GalleryID });
 
-            // Define foreign key relationships
             modelBuilder.Entity<ArtworkGallery>()
                 .HasOne(ag => ag.Artwork)
                 .WithMany(a => a.ArtworkGalleries)
@@ -46,12 +44,11 @@ namespace ArtVista.Infrastructure.Context
                 .WithMany(g => g.ArtworkGalleries)
                 .HasForeignKey(ag => ag.GalleryID);
 
-            // ✅ Fix: Prevent multiple cascade paths for Artist -> Gallery
             modelBuilder.Entity<Gallery>()
                 .HasOne(g => g.Artist)
                 .WithMany(a => a.Galleries)
                 .HasForeignKey(g => g.ArtistId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+                .OnDelete(DeleteBehavior.Restrict); 
 
         }
 

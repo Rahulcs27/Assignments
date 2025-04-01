@@ -51,7 +51,12 @@ namespace ArtVista.API.Controllers
 
             return result ? Ok("Artwork deleted successfully") : Forbid("You can only delete your own artworks.");
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllArtworks()
+        {
+            var artworks = await _artworkService.GetAllArtworksAsync();
+            return Ok(artworks);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetArtworkById(int id)
         {

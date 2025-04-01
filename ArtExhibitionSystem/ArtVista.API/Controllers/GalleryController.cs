@@ -21,8 +21,7 @@ namespace ArtVista.API.Controllers
             _artistRepository = artistRepository;
         }
 
-        // ✅ Create a new gallery
-        [Authorize(Roles = "Artist")] // Only Artists can create galleries
+        [Authorize(Roles = "Artist")] 
         [HttpPost("create")]
         public async Task<IActionResult> CreateGallery([FromBody] CreateGalleryDto galleryDto)
         {
@@ -31,21 +30,19 @@ namespace ArtVista.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            // ✅ Check if the artist exists
             var artist = await _artistRepository.GetArtistByUserIdAsync(galleryDto.ArtistId);
             if (artist == null)
             {
                 return NotFound(new { message = "Artist not found." });
             }
 
-            // ✅ Map DTO to Entity
             var gallery = new Gallery
             {
                 Name = galleryDto.Name,
                 Description = galleryDto.Description,
                 Location = galleryDto.Location,
-                ArtistId = galleryDto.ArtistId, // ✅ Ensure this is set correctly
-                Artist = artist // ✅ Link artist to avoid validation errors
+                ArtistId = galleryDto.ArtistId, 
+                Artist = artist
             };
 
             await _galleryService.AddGalleryAsync(gallery);
@@ -53,7 +50,6 @@ namespace ArtVista.API.Controllers
             return Ok(new { success = true, message = "Gallery created successfully" });
         }
 
-        // ✅ Get all galleries
         [HttpGet("All")]
         public async Task<IActionResult> GetAllGalleries()
         {
@@ -61,7 +57,6 @@ namespace ArtVista.API.Controllers
             return Ok(galleries);
         }
 
-        // ✅ Get a specific gallery by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGalleryById(int id)
         {
@@ -70,9 +65,8 @@ namespace ArtVista.API.Controllers
             return Ok(gallery);
         }
 
-        // ✅ Update a gallery
         [HttpPut("Update/{id}")]
-        [Authorize(Roles = "Artist")] // Only Artists can update galleries
+        [Authorize(Roles = "Artist")]
         public async Task<IActionResult> UpdateGallery(int id, [FromBody] Gallery gallery)
         {
             if (id != gallery.GalleryID) return BadRequest("Gallery ID mismatch.");
@@ -82,9 +76,8 @@ namespace ArtVista.API.Controllers
             return Ok(new { success = true, message = "Gallery updated successfully." });
         }
 
-        // ✅ Delete a gallery
         [HttpDelete("Delete/{id}")]
-        [Authorize(Roles = "Artist")] // Only Artists can delete galleries
+        [Authorize(Roles = "Artist")]
         public async Task<IActionResult> DeleteGallery(int id)
         {
             var result = await _galleryService.DeleteGalleryAsync(id);

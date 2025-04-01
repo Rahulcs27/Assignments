@@ -27,17 +27,14 @@ namespace ArtVista.Application.Services
 
         public async Task<bool> AddArtworkToGalleryAsync(int artworkId, int galleryId)
         {
-            // Check if artwork exists
             var artwork = await _artworkRepository.GetArtworkByIdAsync(artworkId);
             if (artwork == null)
                 throw new Exception("Artwork not found");
 
-            // Check if gallery exists
             var gallery = await _galleryRepository.GetGalleryByIdAsync(galleryId);
             if (gallery == null)
                 throw new Exception("Gallery not found");
 
-            // Add artwork to gallery
             await _artworkGalleryRepository.AddArtworkToGalleryAsync(artworkId, galleryId);
             return true;
         }
