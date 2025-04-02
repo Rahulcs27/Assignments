@@ -1,0 +1,17 @@
+<div class="gallery-container">
+    <div *ngFor="let gallery of galleries" class="gallery-section">
+      <div class="gallery-header">
+        <h2>{{ gallery.name }}</h2>
+        <span class="artist-name">by {{ gallery.artistId }}</span> 
+        <button *ngIf="isOwner(gallery.artistId)" (click)="deleteGallery(gallery.galleryID)">Delete</button>
+      </div>
+  
+      <div class="artwork-grid">
+        <div *ngFor="let artwork of gallery.artworks" class="artwork-card">
+          <img [src]="artwork.imageURL" alt="{{ artwork.title }}">
+          <p>{{ artwork.title }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

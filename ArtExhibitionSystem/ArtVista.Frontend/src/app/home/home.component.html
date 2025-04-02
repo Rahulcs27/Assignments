@@ -1,15 +1,25 @@
 <div class="artwork-container">
     <h2>All Artworks</h2>
     <a routerLink="/add-artwork" class="btn btn-success">Add Artwork</a>
+    <a routerLink="/favorites" class="btn btn-secondary">My Favorites</a>
     <div *ngIf="artworks.length === 0">
       <p>No artworks available.</p>
-    </div>
-    <div class="artwork-grid">
-        <div class="artwork-card" *ngFor="let artwork of artworks">
-          <img [src]="artwork.imageURL" alt="{{ artwork.title }}" />
-          <h3>{{ artwork.title }}</h3>
-          <p>{{ artwork.description }}</p>
-        </div>
-      </div>
-      
+    </div>   
+  <div class="artwork-grid">
+    <mat-card *ngFor="let artwork of artworks" class="artwork-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ artwork.title }}</mat-card-title>
+        
+      </mat-card-header>
+      <img mat-card-image [src]="artwork.imageURL" alt="{{ artwork.title }}">
+      <mat-card-subtitle>{{ artwork.description }}</mat-card-subtitle>
+      <mat-card-actions>
+        <button mat-icon-button (click)="toggleFavorite(artwork.artworkID)">
+            <mat-icon *ngIf="!isFavorite(artwork.artworkID)">favorite_border</mat-icon>
+            <mat-icon *ngIf="isFavorite(artwork.artworkID)">favorite</mat-icon>
+          </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
+</div>
+  

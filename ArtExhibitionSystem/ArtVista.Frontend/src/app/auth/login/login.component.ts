@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule,RouterModule,CommonModule] // ✅ Include FormsModule here
+  imports: [FormsModule,RouterModule,CommonModule] 
 })
 export class LoginComponent {
   email = '';

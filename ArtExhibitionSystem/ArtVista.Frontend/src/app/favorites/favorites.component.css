@@ -1,0 +1,19 @@
+.artwork-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    justify-content: center;
+}
+
+.artwork-card {
+    width: 100%; 
+    max-width: 300px; 
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+mat-card img {
+    height: 250px; 
+    object-fit: cover; 
+}

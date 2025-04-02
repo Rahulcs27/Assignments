@@ -32,11 +32,19 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  getUserId(): string | null {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.userId || null;
+    }
+    return null;
+  }
   getArtistID(): string | null {
-    const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+    const token = localStorage.getItem('token'); 
     if (token) {
         const decodedToken: any = jwtDecode(token);
-        return decodedToken.userId || null; // Extract userId (which is actually artistID)
+        return decodedToken.userId || null; 
     }
     return null;
   }

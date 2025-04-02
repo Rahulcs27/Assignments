@@ -1,0 +1,22 @@
+<div class="favorites-container">
+    <h2>My Favorite Artworks</h2>
+    <div *ngIf="favoriteArtworks.length === 0">
+      <p>No favorite artworks found.</p>
+    </div>
+    <div class="artwork-grid">
+        <mat-card *ngFor="let artwork of favoriteArtworks" class="artwork-card" appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ artwork.artwork.title }}</mat-card-title>
+            
+          </mat-card-header>
+          <img mat-card-image [src]="artwork.artwork.imageURL" alt="{{ artwork.title }}">
+          <mat-card-subtitle>{{ artwork.artwork.description }}</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-icon-button (click)="toggleFavorite(artwork.artworkID)">
+                <mat-icon>favorite</mat-icon>
+              </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+  </div>
+  
