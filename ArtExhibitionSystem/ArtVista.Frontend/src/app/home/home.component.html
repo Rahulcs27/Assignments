@@ -1,14 +1,15 @@
 <div class="artwork-container">
     <h2>All Artworks</h2>
+    <a routerLink="/add-artwork" class="btn btn-success">Add Artwork</a>
     <div *ngIf="artworks.length === 0">
       <p>No artworks available.</p>
     </div>
     <div class="artwork-grid">
-      <div class="artwork-card" *ngFor="let artwork of artworks">
-        <img [src]="artwork.ImageUrl" alt="{{ artwork.title }}">
-        <h3>{{ artwork.title }}</h3>
-        <p>{{ artwork.description }}</p>
+        <div class="artwork-card" *ngFor="let artwork of artworks">
+          <img [src]="artwork.imageURL" alt="{{ artwork.title }}" />
+          <h3>{{ artwork.title }}</h3>
+          <p>{{ artwork.description }}</p>
+        </div>
       </div>
-    </div>
+      
   </div>
-  

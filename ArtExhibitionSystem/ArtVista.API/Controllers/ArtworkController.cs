@@ -22,7 +22,7 @@ namespace ArtVista.API.Controllers
         public async Task<IActionResult> AddArtwork([FromBody] Artwork artwork)
         {
             await _artworkService.AddArtworkAsync(artwork);
-            return Ok("Artwork added successfully");
+            return Ok(new { message = "Artwork added successfully" });
         }
         [Authorize(Roles = "Artist")]
         [HttpPut("{id}")]

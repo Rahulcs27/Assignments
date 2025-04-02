@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
+
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,14 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+  getArtistID(): string | null {
+    const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+    if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.userId || null; // Extract userId (which is actually artistID)
+    }
+    return null;
   }
   logout(): void {
     localStorage.removeItem('token');

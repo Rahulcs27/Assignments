@@ -13,4 +13,8 @@ export class ArtworkService {
   getAllArtworks(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+  addArtwork(artwork: any): Observable<string> { 
+    return this.http.post(`${this.apiUrl}`, artwork, { responseType: 'text' });
+  }
+  
 }

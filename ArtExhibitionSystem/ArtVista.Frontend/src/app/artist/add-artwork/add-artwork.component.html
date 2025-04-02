@@ -1,0 +1,22 @@
+<div class="container mt-4">
+    <h2 class="text-center">Add New Artwork</h2>
+    <form (ngSubmit)="addArtwork()">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" [(ngModel)]="artwork.title" name="title" class="form-control" required />
+      </div>
+  
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea [(ngModel)]="artwork.description" name="description" class="form-control" required></textarea>
+      </div>
+  
+      <div class="mb-3">
+        <label class="form-label">Image URL</label>
+        <input type="text" [(ngModel)]="artwork.imageURL" name="imageURL" class="form-control" required />
+      </div>
+  
+      <button type="submit" class="btn btn-primary w-100">Add Artwork</button>
+    </form>
+  </div>
+  
