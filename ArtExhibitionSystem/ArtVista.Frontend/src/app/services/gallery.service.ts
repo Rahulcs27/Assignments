@@ -9,10 +9,14 @@ export class GalleryService {
   private baseUrl = 'https://localhost:44357/api';
 
   constructor(private http: HttpClient) {}
-  
+
   getArtistById(userId: string): Observable<any> {
     const url = `https://localhost:44357/api/Gallery/GetArtistById?userId=${userId}`;
     return this.http.get<any>(url);
+  }
+  
+  searchGalleryArtworks(query: string) {
+    return this.http.get<any[]>(`https://localhost:44357/api/Artwork/search/${query}`);
   }
   
 
@@ -24,9 +28,10 @@ export class GalleryService {
     return this.http.get(`${this.baseUrl}/ArtworkGallery/gallery/${galleryId}`);
   }
 
-  createGallery(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Gallery/create`, data);
+  createGallery(galleryData: { name: string; artistId: string | null }) {
+    return this.http.post('https://localhost:44357/api/Gallery/create', galleryData);
   }
+  
 
   updateGallery(galleryId: number, data: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/Gallery/Update/${galleryId}`, data);

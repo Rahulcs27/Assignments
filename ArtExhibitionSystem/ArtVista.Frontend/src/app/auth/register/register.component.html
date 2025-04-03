@@ -48,7 +48,6 @@
                   <div *ngIf="dobField.invalid && dobField.touched" class="text-danger">Date of Birth is required</div>
                 </div>
   
-                <!-- Role Selection -->
                 <div class="form-outline mb-3">
                   <label for="role" class="form-label">Role</label>
                   <select [(ngModel)]="role" name="role" id="role" class="form-select" required #roleField="ngModel">
@@ -59,14 +58,12 @@
                   <div *ngIf="roleField.invalid && roleField.touched" class="text-danger">Please select a role</div>
                 </div>
   
-                <!-- Submit Button -->
                 <div class="text-center pt-1 mb-4">
                   <button type="submit" class="btn btn-outline-danger w-100" [disabled]="registerForm.invalid">
                     Register
                   </button>
                 </div>
   
-                <!-- Login Link -->
                 <div class="d-flex align-items-center justify-content-center">
                   <p class="mb-0 me-2">Already have an account?</p>
                   <a routerLink="/login" class="btn btn-outline-danger ms-2">Login</a>
@@ -75,12 +72,20 @@
             </div>
           </div>
   
-          <!-- Right Side - Gradient Section -->
           <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
             <div class="text-white px-4 py-5 p-md-5 mx-md-4 w-100">
-              <h4 class="mb-4">We are more than just a platform</h4>
+              <h4 class="mb-4">Welcome to ArtVista! </h4>
               <p class="small mb-0">
-                Join Neosoft Leave Management and experience seamless leave tracking. Our platform ensures effortless management for employees and managers.
+                Join our vibrant community of artists and art enthusiasts by creating your account today.
+
+                Why Register?
+                ✔ Showcase your artwork to a global audience.
+                ✔ Create and manage your own art galleries.
+                ✔ Explore and interact with other artists' collections.
+                ✔ Secure and seamless user experience.
+
+                Sign Up Now
+                Fill in your details to get started on your artistic journey!
               </p>
             </div>
           </div>

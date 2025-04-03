@@ -134,7 +134,8 @@ namespace ArtVista.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(ClaimTypes.Name, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("userId", user.Id)
+                new Claim("userId", user.Id),
+                new Claim(ClaimTypes.Sid, user.Id)
             };
 
             claims.AddRange(roleClaims);

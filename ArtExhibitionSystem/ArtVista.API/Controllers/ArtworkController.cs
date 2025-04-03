@@ -28,7 +28,7 @@ namespace ArtVista.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateArtwork(int id, [FromBody] Artwork artwork)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
 
             if (userId == null)
                 return Unauthorized("User authentication failed.");

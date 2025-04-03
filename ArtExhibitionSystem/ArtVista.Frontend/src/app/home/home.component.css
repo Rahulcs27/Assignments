@@ -12,7 +12,10 @@
   }
   
   mat-card img {
-    height: 250px; /* Adjust height to maintain uniformity */
-    object-fit: cover; /* Ensures the image fits properly */
+    height: 250px; 
+    object-fit: cover;
   }
-  
+  .search-container {
+    position: absolute;
+    right: 5%;
+  }

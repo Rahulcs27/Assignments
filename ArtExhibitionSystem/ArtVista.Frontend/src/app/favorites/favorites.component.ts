@@ -5,13 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FavoriteService } from '../services/favorite.service';
 import { AuthService } from '../auth/auth.service';
+import { Router } from 'express';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.css'],
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule]
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule,RouterModule]
 })
 export class FavoritesComponent implements OnInit {
   favoriteArtworks: any[] = [];

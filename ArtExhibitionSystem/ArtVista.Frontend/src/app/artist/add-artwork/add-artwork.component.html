@@ -18,5 +18,30 @@
   
       <button type="submit" class="btn btn-primary w-100">Add Artwork</button>
     </form>
-  </div>
+</div>
+
+<hr>
+
+<div class="container mt-4">
+    <h2 class="text-center">Create New Gallery</h2>
+    <form (ngSubmit)="createGallery()">
+      <div class="mb-3">
+        <label class="form-label">Gallery Name</label>
+        <input type="text" [(ngModel)]="gallery.name" name="galleryName" class="form-control" required />
+      </div>
   
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea [(ngModel)]="gallery.description" name="galleryDescription" class="form-control" required></textarea>
+      </div>
+  
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" [(ngModel)]="gallery.location" name="galleryLocation" class="form-control" required />
+      </div>
+  
+      <button type="submit" class="btn btn-success w-100">Create Gallery</button>
+    </form>
+    
+    <p *ngIf="message" class="text-center text-success mt-3">{{ message }}</p>
+</div>

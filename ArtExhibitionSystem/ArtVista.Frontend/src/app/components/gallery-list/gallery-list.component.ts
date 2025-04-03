@@ -15,8 +15,10 @@ import { RouterModule } from '@angular/router';
 export class GalleryListComponent implements OnInit {
   galleries: any[] = [];
   allArtworks: any[] = [];  
+  filteredArtworks: any[] = [];  
   selectedArtwork: { [galleryID: number]: number } = {};  
   loggedInUserId: string | null = null;
+  searchQuery: string = '';
 
   constructor(
     private galleryService: GalleryService,
@@ -55,6 +57,8 @@ export class GalleryListComponent implements OnInit {
   fetchArtworks(): void {
     this.artworkService.getAllArtworks().subscribe((data: any[]) => {
       this.allArtworks = data;
+      
+      this.filteredArtworks = this.allArtworks.filter(artwork => artwork.artistID === this.loggedInUserId);
     });
   }
 
@@ -88,6 +92,26 @@ export class GalleryListComponent implements OnInit {
       error: (error) => {
         console.error('Error adding artwork:', error);
         alert(error.error?.message || 'Failed to add artwork');
+      }
+    });
+  }
+
+  searchGalleryArtworks(): void {
+    if (!this.searchQuery.trim()) {
+      this.fetchGalleries();
+      return;
+    }
+
+    this.galleryService.searchGalleryArtworks(this.searchQuery).subscribe({
+      next: (searchResults) => {
+        this.galleries.forEach((gallery) => {
+          gallery.artworks = searchResults.filter(artwork =>
+            gallery.artworks.some((a: { artworkID: number }) => a.artworkID === artwork.artworkID)
+          );
+        });
+      },
+      error: (error) => {
+        console.error('Error searching artworks:', error);
       }
     });
   }

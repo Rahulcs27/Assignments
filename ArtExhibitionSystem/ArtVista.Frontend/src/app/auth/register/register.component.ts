@@ -17,7 +17,7 @@ export class RegisterComponent {
   role = 'User';
   firstName = '';
   lastName = '';
-  dateOfBirth: string = '';  // Date as a string or Date object, based on how you handle it in your API
+  dateOfBirth: string = new Date().toString();
 
   constructor(private authService: AuthService, private router: Router) {}
 

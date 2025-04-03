@@ -3,6 +3,10 @@
     <a routerLink="/add-artwork" class="btn btn-success">Add Artwork</a>
     <a routerLink="/favorites" class="btn btn-secondary">My Favorites</a>
     
+    <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks..." />
+        <button (click)="searchArtworks()">Search</button>
+      </div>
     <div *ngIf="artworks.length === 0">
       <p>No artworks available.</p>
     </div>   

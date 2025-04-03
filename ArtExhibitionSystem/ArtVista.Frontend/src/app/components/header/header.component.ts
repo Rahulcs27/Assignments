@@ -20,9 +20,10 @@ export class HeaderComponent {
   toggleMenu() {
     this.menuCollapsed = !this.menuCollapsed;
   }
-  checkLoginStatus() {
-    const token = this.authService.getToken();
-    this.isLoggedIn = !!this.authService.getToken();
+  checkLoginStatus():boolean {
+    if(localStorage.getItem('token') == null)
+      return false;
+    return true;
   }
 
   logout() {

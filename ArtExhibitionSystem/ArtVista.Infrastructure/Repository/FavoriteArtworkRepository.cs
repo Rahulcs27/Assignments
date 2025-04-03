@@ -42,7 +42,7 @@ namespace ArtVista.Infrastructure.Repository
                 throw new Exception("Artwork not found.");
             }
 
-            favoriteArtwork.Artwork = existingArtwork; // Explicitly attach the Artwork
+            favoriteArtwork.Artwork = existingArtwork; 
             await _context.FavoriteArtworks.AddAsync(favoriteArtwork);
             await _context.SaveChangesAsync();
         }

@@ -35,7 +35,6 @@ namespace ArtVista.Infrastructure.Repository
                 throw new Exception("Artist not found.");
             }
 
-            // Ensure that the ArtworkID is not explicitly set if it's an identity column
             artwork.ArtworkID = 0; 
 
             await _context.Artworks.AddAsync(artwork);
@@ -51,7 +50,6 @@ namespace ArtVista.Infrastructure.Repository
         {
             var existingArtwork = await _context.Artworks.FindAsync(artwork.ArtworkID);
             if (existingArtwork == null) return false;
-
             if (existingArtwork.ArtistID != userId)
                 throw new UnauthorizedAccessException("You can only update your own artworks.");
 
