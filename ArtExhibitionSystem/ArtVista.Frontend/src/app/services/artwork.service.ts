@@ -10,6 +10,13 @@ export class ArtworkService {
 
   constructor(private http: HttpClient) { }
 
+  getArtistById(userId: string): Observable<any> {
+    const url = `https://localhost:44357/api/Gallery/GetArtistById?userId=${userId}`;
+    return this.http.get<any>(url);
+  }
+  searchArtworks(query: string) {
+    return this.http.get<any[]>(`https://localhost:44357/api/Artwork/search/${query}`);
+  }  
   getAllArtworks(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }

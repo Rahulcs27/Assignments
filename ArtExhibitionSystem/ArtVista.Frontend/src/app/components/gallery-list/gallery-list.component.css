@@ -45,3 +45,30 @@
     transition: transform 0.3s ease;
   }
   
+  .add-artwork-section {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .add-artwork-section select {
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  .add-artwork-section button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .no-artworks {
+    color: #777;
+    font-style: italic;
+    text-align: center;
+  }
+  

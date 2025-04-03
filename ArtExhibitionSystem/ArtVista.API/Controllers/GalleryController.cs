@@ -1,4 +1,5 @@
 ﻿using ArtVista.Application.Interfaces;
+using ArtVista.Application.Services;
 using ArtVista.Domain.Entities;
 using ArtVista.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,13 @@ namespace ArtVista.API.Controllers
         {
             _galleryService = galleryService;
             _artistRepository = artistRepository;
+        }
+
+        [HttpGet("GetArtistById")]
+        public async Task<IActionResult> GetArtistByIdAsync(string userId)
+        {
+            var foundArtist = await _artistRepository.GetArtistByUserIdAsync(userId);
+            return Ok(foundArtist);
         }
 
         [Authorize(Roles = "Artist")] 

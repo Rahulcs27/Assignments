@@ -1,17 +1,36 @@
 <div class="gallery-container">
     <div *ngFor="let gallery of galleries" class="gallery-section">
-      <div class="gallery-header">
-        <h2>{{ gallery.name }}</h2>
-        <span class="artist-name">by {{ gallery.artistId }}</span> 
-        <button *ngIf="isOwner(gallery.artistId)" (click)="deleteGallery(gallery.galleryID)">Delete</button>
-      </div>
-  
-      <div class="artwork-grid">
-        <div *ngFor="let artwork of gallery.artworks" class="artwork-card">
-          <img [src]="artwork.imageURL" alt="{{ artwork.title }}">
-          <p>{{ artwork.title }}</p>
+        <div class="gallery-header">
+            <h2>{{ gallery.name }}</h2>
+            <span class="artist-name">by {{ gallery.artistName || 'Unknown Artist' }}</span> 
+            
+            <!-- Show delete button only for the owner -->
+            <button *ngIf="isOwner(gallery.artistId)" class="delete-btn" (click)="deleteGallery(gallery.galleryID)">
+                ❌ Delete
+            </button>
         </div>
-      </div>
+
+        <!-- Add Artwork Section (Only for Gallery Owner) -->
+        <div *ngIf="isOwner(gallery.artistId)" class="add-artwork-section">
+            <select [(ngModel)]="selectedArtwork[gallery.galleryID]">
+                <option *ngFor="let artwork of allArtworks" [value]="artwork.artworkID">
+                    {{ artwork.title }}
+                </option>
+            </select>
+            <button (click)="addArtwork(gallery.galleryID)">Add Artwork</button>
+        </div>
+
+        <!-- Show a message if no artworks exist -->
+        <div *ngIf="!gallery.artworks || gallery.artworks.length === 0" class="no-artworks">
+            No artworks in this gallery.
+        </div>
+
+        <!-- Display artworks -->
+        <div class="artwork-grid" *ngIf="gallery.artworks && gallery.artworks.length > 0">
+            <div *ngFor="let artwork of gallery.artworks" class="artwork-card">
+                <img [src]="artwork.imageURL" alt="{{ artwork.title }}">
+                <p>{{ artwork.title }}</p>
+            </div>
+        </div>
     </div>
-  </div>
-  
+</div>

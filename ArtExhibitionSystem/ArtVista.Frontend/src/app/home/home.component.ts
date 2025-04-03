@@ -7,6 +7,7 @@ import { ArtworkService } from '../services/artwork.service';
 import { FavoriteService } from '../services/favorite.service';
 import { AuthService } from '../auth/auth.service';
 import { RouterModule } from '@angular/router';
+import { GalleryService } from '../services/gallery.service';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private artworkService: ArtworkService,
+    private galleryService: GalleryService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private favoriteService: FavoriteService
@@ -35,28 +37,39 @@ export class HomeComponent implements OnInit {
     this.artworkService.getAllArtworks().subscribe({
       next: (data) => {
         this.artworks = data;
+
+        this.artworks.forEach((artwork) => {
+          if (!artwork.artistID) {
+            artwork.artistName = 'Unknown Artist';
+            return;
+          }
+
+          this.galleryService.getArtistById(artwork.artistID).subscribe(
+            (artist) => {
+              artwork.artistName = artist?.name || 'Unknown Artist';
+            },
+            () => {
+              artwork.artistName = 'Unknown Artist';
+            }
+          );
+        });
       },
-      error: (err) => {
-        console.error('Error fetching artworks:', err);
+      error: () => {
+        this.artworks = [];
       },
     });
   }
 
   loadFavorites() {
-    const userId = this.authService.getUserId() || ''; // Provide a default empty string
-    if (!userId) {
-      console.error('User ID is null. Cannot fetch favorites.');
-      return; // Stop execution if userId is not available
-    }
-  
+    const userId = this.authService.getUserId();
+    if (!userId) return;
+
     this.favoriteService.getFavoriteArtworks(userId).subscribe({
       next: (favorites) => {
-        this.favoriteArtworks = new Set(favorites.map(fav => fav.artworkID));
+        this.favoriteArtworks = new Set(favorites.map((fav) => fav.artworkID));
       },
-      error: (err) => console.error('Error fetching favorites:', err)
     });
   }
-  
 
   isFavorite(artworkID: number): boolean {
     return this.favoriteArtworks.has(artworkID);
@@ -64,10 +77,7 @@ export class HomeComponent implements OnInit {
 
   toggleFavorite(artworkID: number) {
     this.favoriteService.toggleFavorite(artworkID).subscribe({
-      next: () => {
-        this.loadFavorites(); 
-      },
-      error: (err) => console.error('Error toggling favorite:', err)
+      next: () => this.loadFavorites(),
     });
   }
 }
