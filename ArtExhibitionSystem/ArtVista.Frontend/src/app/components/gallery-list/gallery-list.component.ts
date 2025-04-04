@@ -19,7 +19,7 @@ export class GalleryListComponent implements OnInit {
   selectedArtwork: { [galleryID: number]: number } = {};  
   loggedInUserId: string | null = null;
   searchQuery: string = '';
-
+  userEmail:string = localStorage.getItem('email') || '';
   constructor(
     private galleryService: GalleryService,
     private artworkService: ArtworkService,
@@ -90,6 +90,10 @@ export class GalleryListComponent implements OnInit {
         this.fetchGalleries();
       },
       error: (error) => {
+        if(error.status === 400) {
+          alert('Artwork already exists in the gallery!');
+          return;
+        }
         console.error('Error adding artwork:', error);
         alert(error.error?.message || 'Failed to add artwork');
       }

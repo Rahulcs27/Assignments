@@ -20,6 +20,7 @@ export class AddArtworkComponent {
     imageURL: '',
     artistID: ''
   };
+  
 
   gallery = {
     name: '',

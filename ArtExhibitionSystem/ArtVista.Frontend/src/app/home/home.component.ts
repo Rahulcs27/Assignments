@@ -8,30 +8,38 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, RouterModule, FormsModule]
-
 })
 export class HomeComponent implements OnInit {
   artworks: any[] = [];
   favoriteArtworks: Set<number> = new Set();
   searchQuery: string = '';
-
+  isArtist: boolean = false;
+  loggedInArtistId: string | null = null;
   constructor(
     private artworkService: ArtworkService,
     private galleryService: GalleryService,
     private authService: AuthService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
+    this.loggedInArtistId = this.authService.getArtistID(); 
     this.fetchArtworks();
     this.loadFavorites();
+    this.checkUserRole();
+  }
+
+  checkUserRole() {
+    const userRole = this.authService.getUserRole();
+    this.isArtist = userRole === 'Artist'; 
   }
 
   fetchArtworks() {
@@ -93,5 +101,25 @@ export class HomeComponent implements OnInit {
       next: () => this.loadFavorites(),
       error: (err) => console.error('Error toggling favorite:', err),
     });
+  }
+
+  deleteArtwork(id: number) {
+    if (confirm('Are you sure you want to delete this artwork?')) {
+      this.artworkService.deleteArtwork(id).subscribe({
+        next: () => {
+          alert('Artwork deleted successfully!');
+          this.artworks = this.artworks.filter(artwork => artwork.artworkID !== id);
+          this.fetchArtworks();
+        },
+        error: (err) => {
+          if(err.status == 200) {
+            alert('Artwork deleted successfully!');
+            this.router.navigate(['/home']);
+            this.fetchArtworks();
+          }
+          console.error('Error deleting artwork:', err)
+        }
+      });
+    }
   }
 }

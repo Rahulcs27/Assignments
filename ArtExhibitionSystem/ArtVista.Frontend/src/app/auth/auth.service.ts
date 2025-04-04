@@ -48,6 +48,19 @@ export class AuthService {
     }
     return null;
   }
+  getUserRole(): string | null {
+    const token = localStorage.getItem('token'); 
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || null;
+      } catch (error) {
+        console.error('Error decoding JWT token', error);
+        return null;
+      }
+    }
+    return null;
+  }
   logout(): void {
     localStorage.removeItem('token');
   }

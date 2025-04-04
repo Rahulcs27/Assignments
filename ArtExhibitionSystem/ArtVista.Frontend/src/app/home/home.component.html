@@ -1,12 +1,15 @@
+<!-- <div class="button-container">
+    <a routerLink="/add-artwork" class="add-artwork-btn">Add Artwork</a>
+    <a routerLink="/favorites" class="favorites-btn">My Favorites</a>
+</div>
 <div class="artwork-container">
     <h2>All Artworks</h2>
-    <a routerLink="/add-artwork" class="btn btn-success">Add Artwork</a>
-    <a routerLink="/favorites" class="btn btn-secondary">My Favorites</a>
-    
-    <div class="search-container">
-        <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks..." />
-        <button (click)="searchArtworks()">Search</button>
-      </div>
+      <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks by name" />
+        <button (click)="searchArtworks()">
+            Search
+        </button>
+    </div>    
     <div *ngIf="artworks.length === 0">
       <p>No artworks available.</p>
     </div>   
@@ -29,5 +32,50 @@
                 </button>
             </mat-card-actions>
         </mat-card>
+    </div>
+</div> -->
+<div class="button-container">
+    
+    
+</div>
+
+<div class="artwork-container">
+    <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks by name" />
+        <button (click)="searchArtworks()">
+            Search
+        </button>        
+    </div>    
+    <div class="fav">
+        <button class="add-artwork-btn" *ngIf="isArtist"><a routerLink="/add-artwork">Add Artwork</a></button>
+        <button class="fav-btn"><a routerLink="/favorites" >My Favourites</a></button>
+    </div>
+    <br><br>
+
+    <div *ngIf="artworks.length === 0">
+      <p>No artworks available.</p>
+    </div>   
+
+    <div class="artwork-grid">
+        <div *ngFor="let artwork of artworks" class="artwork-card">
+            <img [src]="artwork.imageURL" alt="{{ artwork.title }}">
+            
+            <div class="card-info">
+                <h3>{{ artwork.title }}</h3>
+                <p>By {{ artwork.artistName || 'Unknown Artist' }}</p>
+                            <mat-card-subtitle>{{ artwork.description }}</mat-card-subtitle>
+            </div>
+
+            <div class="card-actions">
+                <button (click)="toggleFavorite(artwork.artworkID)" class="favorite-btn">
+                    <mat-icon *ngIf="!isFavorite(artwork.artworkID)">favorite_border</mat-icon>
+                    <mat-icon *ngIf="isFavorite(artwork.artworkID)">favorite</mat-icon>
+                </button>
+                <button *ngIf="loggedInArtistId && artwork.artistID === loggedInArtistId"
+                    (click)="deleteArtwork(artwork.artworkID)" class="delete-btn">
+                    <mat-icon>delete</mat-icon>
+                 </button>
+            </div>
+        </div>
     </div>
 </div>

@@ -20,6 +20,7 @@ export class LoginComponent {
   login() {
     this.authService.login(this.email, this.password).subscribe(response => {
       localStorage.setItem('token', response.token);
+      localStorage.setItem('email', response.email); // Store userId in local storage
       alert('Login successful!');
       this.router.navigate(['/']);
     }, error => {

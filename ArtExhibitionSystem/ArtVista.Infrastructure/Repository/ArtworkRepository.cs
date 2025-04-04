@@ -64,7 +64,7 @@ namespace ArtVista.Infrastructure.Repository
 
         public async Task<bool> RemoveArtworkAsync(int artworkId,string userId)
         {
-            var artwork = await _context.Artworks.FindAsync(artworkId);
+            var artwork = await _context.Artworks.FirstOrDefaultAsync(a => a.ArtworkID == artworkId);
             if (artwork == null) return false;
 
             if (artwork.ArtistID != userId)

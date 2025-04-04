@@ -23,5 +23,14 @@ export class ArtworkService {
   addArtwork(artwork: any): Observable<string> { 
     return this.http.post(`${this.apiUrl}`, artwork, { responseType: 'text' });
   }
+  updateArtwork(artworkID: number, artworkData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${artworkID}`, artworkData);
+  }
+  getArtworkById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+  deleteArtwork(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }  
   
 }

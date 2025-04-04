@@ -36,13 +36,13 @@ namespace ArtVista.API.Controllers
             artwork.ArtworkID = id;
             var result = await _artworkService.UpdateArtworkAsync(artwork, userId);
 
-            return result ? Ok("Artwork updated successfully") : Forbid("You can only update your own artworks.");
+            return Ok(new { message = "Artwork updated successfully" });
         }
         [Authorize(Roles = "Artist")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArtwork(int id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
 
             if (userId == null)
                 return Unauthorized("User authentication failed.");

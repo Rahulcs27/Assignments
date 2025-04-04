@@ -1,27 +1,29 @@
 <div class="gallery-container">
+    <h5 style="text-align: center;">Welcome, {{userEmail}}</h5>
     <div class="search-container">
         <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks by name" />
         <button (click)="searchGalleryArtworks()">
             Search
         </button>
+        
     </div>    
     <div *ngFor="let gallery of galleries" class="gallery-section">
+        
         <div class="gallery-header">
             <h2>{{ gallery.name }}</h2>
             <span class="artist-name">by {{ gallery.artistName || 'Unknown Artist' }}</span> 
+            <div *ngIf="isOwner(gallery.artistId)" class="add-artwork-section">
+                <select [(ngModel)]="selectedArtwork[gallery.galleryID]" class="modern-dropdown">
+                    <option *ngFor="let artwork of filteredArtworks" [value]="artwork.artworkID">
+                        {{ artwork.title }}
+                    </option>
+                </select>
+                <button (click)="addArtwork(gallery.galleryID)">Add Artwork</button>
+                <button *ngIf="isOwner(gallery.artistId)" class="delete-btn" (click)="deleteGallery(gallery.galleryID)">
+                    Delete Gallery
+                </button>
+            </div>
             
-            <button *ngIf="isOwner(gallery.artistId)" class="delete-btn" (click)="deleteGallery(gallery.galleryID)">
-                Delete
-            </button>
-        </div>
-
-        <div *ngIf="isOwner(gallery.artistId)" class="add-artwork-section">
-            <select [(ngModel)]="selectedArtwork[gallery.galleryID]">
-                <option *ngFor="let artwork of filteredArtworks" [value]="artwork.artworkID">
-                    {{ artwork.title }}
-                </option>
-            </select>
-            <button (click)="addArtwork(gallery.galleryID)">Add Artwork</button>
         </div>
 
         <div *ngIf="!gallery.artworks || gallery.artworks.length === 0" class="no-artworks">

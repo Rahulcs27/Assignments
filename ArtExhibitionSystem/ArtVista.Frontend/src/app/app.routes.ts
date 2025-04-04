@@ -14,5 +14,6 @@ export const routes: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'favorites', component: FavoritesComponent },
   { path: '', component: GalleryListComponent },
-  { path: 'add-artwork', component: AddArtworkComponent }
+  { path: 'add-artwork', component: AddArtworkComponent },
+  { path: 'edit-artwork/:id', component: AddArtworkComponent }
 ];
