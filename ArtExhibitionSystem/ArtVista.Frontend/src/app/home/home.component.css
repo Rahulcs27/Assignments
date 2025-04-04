@@ -15,7 +15,3 @@
     height: 250px; 
     object-fit: cover;
   }
-  .search-container {
-    position: absolute;
-    right: 5%;
-  }

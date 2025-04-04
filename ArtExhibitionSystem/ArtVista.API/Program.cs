@@ -12,6 +12,7 @@ using ArtVista.Infrastructure.Repository;
 using ArtVista.Application.Services;
 using ArtVista.Infrastructure.Services;
 using ArtVista.Domain.Interfaces;
+using ArtVista.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,7 @@ app.UseCors(x => x
                         .AllowAnyHeader());
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

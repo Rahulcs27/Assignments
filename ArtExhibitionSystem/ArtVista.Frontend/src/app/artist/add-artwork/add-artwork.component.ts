@@ -84,7 +84,7 @@ export class AddArtworkComponent {
     this.galleryService.createGallery(galleryData).subscribe({
       next: () => {
         this.message = 'Gallery created successfully!';
-        this.gallery = { name: '', description: '', location: '', artistId: '' }; // Clear input fields
+        this.gallery = { name: '', description: '', location: '', artistId: '' }; 
       },
       error: (err) => {
         console.error('Error creating gallery:', err);

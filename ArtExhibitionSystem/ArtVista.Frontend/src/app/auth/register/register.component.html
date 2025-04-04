@@ -3,11 +3,14 @@
       <div class="card rounded-3 text-black shadow-lg p-4">
         <div class="row g-0">
           
-          <!-- Left Side - Registration Form -->
           <div class="col-lg-6 d-flex align-items-center">
             <div class="card-body p-5 w-100">
               <div class="text-center">
                 <h4 class="mt-1 mb-5 pb-1">Create Your Account</h4>
+              </div>
+  
+              <div *ngIf="errorMessage" class="alert alert-danger text-center">
+                {{ errorMessage }}
               </div>
   
               <form (ngSubmit)="register()" #registerForm="ngForm">
@@ -48,6 +51,7 @@
                   <div *ngIf="dobField.invalid && dobField.touched" class="text-danger">Date of Birth is required</div>
                 </div>
   
+                <!-- Role Selection -->
                 <div class="form-outline mb-3">
                   <label for="role" class="form-label">Role</label>
                   <select [(ngModel)]="role" name="role" id="role" class="form-select" required #roleField="ngModel">
@@ -58,6 +62,7 @@
                   <div *ngIf="roleField.invalid && roleField.touched" class="text-danger">Please select a role</div>
                 </div>
   
+                <!-- Register Button -->
                 <div class="text-center pt-1 mb-4">
                   <button type="submit" class="btn btn-outline-danger w-100" [disabled]="registerForm.invalid">
                     Register
@@ -72,26 +77,25 @@
             </div>
           </div>
   
+          <!-- Right Side - Info Section -->
           <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
             <div class="text-white px-4 py-5 p-md-5 mx-md-4 w-100">
               <h4 class="mb-4">Welcome to ArtVista! </h4>
               <p class="small mb-0">
                 Join our vibrant community of artists and art enthusiasts by creating your account today.
-
-                Why Register?
-                ✔ Showcase your artwork to a global audience.
-                ✔ Create and manage your own art galleries.
-                ✔ Explore and interact with other artists' collections.
+  
+                <br><br>
+                <b>Why Register?</b><br>
+                ✔ Showcase your artwork to a global audience.<br>
+                ✔ Create and manage your own art galleries.<br>
+                ✔ Explore and interact with other artists' collections.<br>
                 ✔ Secure and seamless user experience.
-
-                Sign Up Now
-                Fill in your details to get started on your artistic journey!
               </p>
             </div>
           </div>
           
-        </div> <!-- End of row -->
-      </div> <!-- End of card -->
+        </div>
+      </div> 
     </div>
   </div>
   

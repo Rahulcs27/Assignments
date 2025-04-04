@@ -11,6 +11,7 @@ using ArtVista.Application.Interfaces;
 using ArtVista.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using ArtVista.Identity.Context;
+using ArtVista.Application.Exceptions;
 namespace ArtVista.Infrastructure.Services
 {
     public class AuthService : IAuthService
@@ -60,6 +61,8 @@ namespace ArtVista.Infrastructure.Services
             using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
             try
             {
+                ValidatePassword(request.Password);
+
                 var user = new ApplicationUser
                 {
                     UserName = request.Email,
@@ -72,13 +75,13 @@ namespace ArtVista.Infrastructure.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)
                 {
-                    throw new Exception("User registration failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                    throw new ValidationException("User registration failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
 
                 user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
-                    throw new Exception("User retrieval failed after creation.");
+                    throw new NotFoundException("User retrieval failed after creation.");
                 }
 
                 var role = string.IsNullOrEmpty(request.Role) ? "User" : request.Role;
@@ -90,7 +93,7 @@ namespace ArtVista.Infrastructure.Services
                 var roleResult = await _userManager.AddToRoleAsync(user, role);
                 if (!roleResult.Succeeded)
                 {
-                    throw new Exception("Role assignment failed: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                    throw new ValidationException("Role assignment failed: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
                 }
 
                 if (role == "Artist")
@@ -104,9 +107,21 @@ namespace ArtVista.Infrastructure.Services
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new Exception($"Registration failed: {ex.Message}");
+                throw; 
             }
         }
+        private void ValidatePassword(string password)
+        {
+            if (password.Length < 8)
+                throw new ValidationException("Password must be at least 8 characters long.");
+
+            if (!password.Any(char.IsUpper))
+                throw new ValidationException("Password must contain at least one uppercase letter.");
+
+            if (!password.Any(ch => !char.IsLetterOrDigit(ch)))
+                throw new ValidationException("Password must contain at least one special character.");
+        }
+
 
         public async Task RegisterAsArtist(ApplicationUser user, ArtistDTO ato)
         {
