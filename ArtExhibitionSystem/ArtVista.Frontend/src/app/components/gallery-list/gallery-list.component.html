@@ -1,5 +1,5 @@
 <div class="gallery-container">
-    <h5 style="text-align: center;">Welcome, {{userEmail}}</h5>
+    <h5 style="text-align: center;" *ngIf="userEmail != null">Welcome {{userEmail}}</h5>
     <div class="search-container">
         <input type="text" [(ngModel)]="searchQuery" placeholder="Search artworks by name" />
         <button (click)="searchGalleryArtworks()">
